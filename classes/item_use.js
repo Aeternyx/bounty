@@ -57,4 +57,6 @@ class ItemUse extends GMLObject {
 }
 
 window.classes.push(ItemUse)
+/* global Sprites */
+ItemUse.prototype.sprite_index = Sprites.spr_button_item_use
 window.obj_item_use = __gml_proto_proxy(ItemUse.prototype)

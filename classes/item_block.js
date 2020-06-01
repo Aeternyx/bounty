@@ -1,10 +1,7 @@
 // gml
+/* globals GMLObject */
 
 class ItemBlock extends GMLObject {
-  create() {
-    super.create()
-    let self = this
-  }
 }
 
 window.classes.push(ItemBlock)

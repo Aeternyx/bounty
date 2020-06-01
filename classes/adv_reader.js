@@ -27,16 +27,16 @@ class AdvReader extends GMLObject {
     }
     if (instance_exists(obj_status_mask)) {
       obj_status_mask.instances.forEach(self => {
-        if (self.type === 1) { // TODO: what is type 1
+        if (self.type === 1) { // NOTE: type === advantage
           if (self.active) {
             obj_adv_reader.advantage = self.number
             obj_adv_reader.text = get_text_advantage(obj_adv_reader.advantage)
           }
           return
-        } else if (self.type === 2) {
+        } else if (self.type === 2) { // NOTE: type === inventory
           if (self.active) {
             obj_adv_reader.advantage = self.number
-            obj_adv_reader.text = get_text_advantage(obj_adv_reader.advantage)
+            obj_adv_reader.text = get_text_inventory(obj_adv_reader.advantage)
           }
           return
         }

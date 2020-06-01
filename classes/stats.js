@@ -10,7 +10,7 @@ class Stats extends GMLObject {
     const self = this
     self.debug = false
     self.alarm[0] = 30
-    self.fpsreal = self.fps_real
+    self.fpsreal = fps_real
     self.data = 0
     self.last_room = room
     self.race = "Human"
@@ -118,6 +118,8 @@ class Stats extends GMLObject {
     self.o_gangbang = 3
     self.o_price = 2
     self.o_safety = 2
+    self.o_prostitution = 2
+    self.o_self_defense = 2
     self.visits = 1
     self.food = 2
     self.bonus_encounters = 0
@@ -157,9 +159,9 @@ class Stats extends GMLObject {
     }
     let i
     if (self.bar_type === 1) {
-      i = 31
+      i = Sprites.spr_bar_1
     } else if (self.bar_type === 2) {
-      i = 32
+      i = Sprites.spr_bar_2
     }
     if (self.bar_visible === 2 || self.bar_visible === 4) {
       draw_sprite(i, 0, 0, 0)
@@ -306,7 +308,7 @@ class Stats extends GMLObject {
           draw_text(xx, yy, string(self.advantages[i]))
           if (mask) {
             let obj = instance_create(xx, yy, obj_status_mask)
-            obj.type = 1 // TODO: what dis
+            obj.type = 1 // NOTE: type = advantage
             obj.number = self.advantages[i]
           }
         }
@@ -324,7 +326,7 @@ class Stats extends GMLObject {
       yy += ii
       for (let i = 0; i < 15; i++) {
         if (self.inventory[i][0] !== "None" || self.debug) {
-          draw_text(xx, yy, string(self.inventory[i][1]))
+          draw_text(xx, yy, string(self.inventory[i][0]))
           if (self.inventory[i][1] !== 0) {
             draw_set_halign(HAligns.fa_right)
             draw_text(xx + 164, yy, string(self.inventory[i][1]))
@@ -332,14 +334,14 @@ class Stats extends GMLObject {
           }
           if (mask) {
             let obj = instance_create(xx, yy, obj_status_mask)
-            obj.type = 2
+            obj.type = 2 // NOTE: type = inventory
             obj.number = self.inventory[i][1]
             if (!item_bound(self.inventory[i][0])) {
-              let obj = instance_create(xx, yy, obj_item_drop)
+              let obj = instance_create(xx + 200, yy + 3, obj_item_drop)
               obj.item = self.inventory[i][0]
             }
             if (!item_bound(self.inventory[i][0])) {
-              let obj = instance_create(xx, yy, obj_item_use)
+              let obj = instance_create(xx + 188, yy + 3, obj_item_use)
               obj.item = self.inventory[i][0]
             }
           }
@@ -559,7 +561,7 @@ class Stats extends GMLObject {
       draw_set_valign(VAligns.fa_top)
       draw_set_color(Colors.c_white)
       draw_set_font(Fonts.f_console)
-      draw_text(0, 462, string(self.fpsreal))
+      draw_text(0, 462, string(self.fpsreal.toFixed(2)))
     }
     // TODO
   }
@@ -567,7 +569,7 @@ class Stats extends GMLObject {
   alarm0() {
     super.alarm0()
     const self = this
-    self.fpsreal = self.fps_real
+    self.fpsreal = fps_real
     self.alarm[0] = 30
   }
   

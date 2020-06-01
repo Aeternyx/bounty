@@ -44,4 +44,6 @@ class ItemDrop extends GMLObject {
 }
 
 window.classes.push(ItemDrop)
+/* global Sprites */
+ItemDrop.prototype.sprite_index = Sprites.spr_button_item_drop
 window.obj_item_drop = __gml_proto_proxy(ItemDrop.prototype)

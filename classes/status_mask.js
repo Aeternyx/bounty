@@ -30,10 +30,11 @@ class StatusMask extends GMLObject {
   mouseleave() {
     super.mouseleave()
     let self = this
-    self.active = true
+    self.active = false
   }
 }
 
 window.classes.push(StatusMask)
+/* global Sprites */
 StatusMask.prototype.sprite_index = Sprites.spr_mask_100x13
 window.obj_status_mask = __gml_proto_proxy(StatusMask.prototype)

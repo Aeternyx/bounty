@@ -247,6 +247,7 @@ class Location extends GMLObject {
         instance_destroy.call(self)
       })
     }
+    self.yy = self.y
     // TODO: fix anal bonuses i guess
   }
   
@@ -267,7 +268,7 @@ class Location extends GMLObject {
     } else if (self.scroll) {
       draw_text_ext(self.x, self.yy, self.text, 13, 380)
     }
-    if (instance_exists(obj_location_scroll)) {
+    if (instance_exists(obj_location_scroll) && obj_stats.debug) {
       draw_text_ext(430, 0, string(floor(self.yy)) + " " + string(floor(obj_location_scroll.position)) + " " + string(self.scale), 13, 390)
     }
   }

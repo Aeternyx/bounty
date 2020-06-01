@@ -21,3 +21,4 @@
 - [ ] sort out instance_destroy and using the prototype and when to create new shit
 - [ ] call .destroy on objects
 - [ ] non prototype `.instances` should only return itself
+- [ ] reset obj_stats on game restart

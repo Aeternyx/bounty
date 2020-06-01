@@ -49,7 +49,7 @@ class Travel extends GMLObject {
     if (advantage_exist(Advantages.relief_girl)) {
       add_fame(2)
     }
-    for (let i = 8; i > 0; i++) {
+    for (let i = 8; i > 0;) {
       if (obj_stats.bounty_distance < 10) {
         obj_stats.bounty_distance += 1
         i -= 1

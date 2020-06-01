@@ -398,7 +398,7 @@ function save_game(save_num) {
       ii2 = "N" + string(i)
     }
     ini_write_string(slot, ii, self.inventory[i][0])
-    ini_write_real(slot, ii, self.inventory[i][1])
+    ini_write_real(slot, ii2, self.inventory[i][1])
   }
   ini_close()
 }

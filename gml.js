@@ -13,7 +13,10 @@ let __gml_game_loop = 0,
   room = 0,
   mouse_x = 0,
   mouse_y = 0,
-  __gml_global_variables = []
+  old_mouse_x = 0,
+  old_mouse_y = 0,
+  __gml_global_variables = [],
+  fps_real = 1
 
 // TODO: begin rng, non-gml
 let __gml_prng_c = (function () {
@@ -577,43 +580,40 @@ function draw_text(x, y, string) {
     bx = image.src.x,
     by = image.src.y,
     halign = __gml_draw_config.halign;
-  (function () {
-    if (__gml_draw_config.color === 0xffffff) {
-      return Promise.resolve(sheet)
-    } else {
-      tcanvas.width = sheet.width
-      tcanvas.height = sheet.height
-      tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
-      tctx.drawImage(sheet, image.src.x, image.src.y, image.src.width, image.src.height, 0, 0, image.dest.width, image.dest.height)
-      const sheetData = tctx.getImageData(0, 0, image.src.width, image.src.height)
-      const b = __gml_draw_config.color >> 16,
-        g = (__gml_draw_config.color >> 8) & 0xff,
-        r = __gml_draw_config.color & 0xff
-      for (let i = 0; i < sheetData.data.length; i += 4) {
-        sheetData.data[i + 0] *= r / 0xff;
-        sheetData.data[i + 1] *= g / 0xff;
-        sheetData.data[i + 2] *= b / 0xff;
-      }
-      bx = 0
-      by = 0
-      return createImageBitmap(sheetData)
+  if (__gml_draw_config.color !== 0xffffff) {
+    tcanvas.width = sheet.width
+    tcanvas.height = sheet.height
+    tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
+    tctx.drawImage(sheet, image.src.x, image.src.y, image.src.width, image.src.height, 0, 0, image.dest.width, image.dest.height)
+    const sheetData = tctx.getImageData(0, 0, image.src.width, image.src.height)
+    const b = __gml_draw_config.color >> 16,
+      g = (__gml_draw_config.color >> 8) & 0xff,
+      r = __gml_draw_config.color & 0xff
+    for (let i = 0; i < sheetData.data.length; i += 4) {
+      sheetData.data[i + 0] *= r / 0xff;
+      sheetData.data[i + 1] *= g / 0xff;
+      sheetData.data[i + 2] *= b / 0xff;
     }
-  })().then(sheet => {
-    for (let line of lines) {
-      let width = Array.from(line).reduce((p, c) => p + lookup[c].shift, 0),
-        x2 = x
-      switch (halign) {
-        case HAligns.fa_center: x2 -= Math.ceil(width / 2); break
-        case HAligns.fa_right: x2 -= width; break
-      }
-      for (let c of line) {
-        let ch = lookup[c]
-        ctx.drawImage(sheet, bx + ch.frame.x, by + ch.frame.y, ch.frame.width, ch.frame.height, x2 + ch.offset, y2, ch.frame.width, ch.frame.height)
-        x2 += ch.shift
-      }
-      y2 += lineHeight
+    bx = 0
+    by = 0
+    tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
+    tctx.putImageData(sheetData, 0, 0)
+    sheet = tcanvas.transferToImageBitmap()
+  }
+  for (let line of lines) {
+    let width = Array.from(line).reduce((p, c) => p + lookup[c].shift, 0),
+      x2 = x
+    switch (halign) {
+      case HAligns.fa_center: x2 -= Math.ceil(width / 2); break
+      case HAligns.fa_right: x2 -= width; break
     }
-  })
+    for (let c of line) {
+      let ch = lookup[c]
+      ctx.drawImage(sheet, bx + ch.frame.x, by + ch.frame.y, ch.frame.width, ch.frame.height, x2 + ch.offset, y2, ch.frame.width, ch.frame.height)
+      x2 += ch.shift
+    }
+    y2 += lineHeight
+  }
 }
 
 function draw_text_ext(x, y, string, sep, w) {
@@ -750,12 +750,10 @@ function room_goto_previous() {
 
 function room_restart() {
   room_goto(room)
-  /*for (const instance of __gml_global_variables) {
-    instance.roomstart()
-  }
-  for (const instance of __gml_current_room.instances) {
-    instance.roomstart()
-  }*/
+}
+
+function game_restart() {
+  room_goto(Rooms.rm_init)
 }
 
 class GMLObject {
@@ -840,6 +838,7 @@ class GMLRoom {
   }
   
   draw() {
+    const start = performance.now()
     ctx.fillStyle = "black"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     const oldRoom = room
@@ -864,6 +863,7 @@ class GMLRoom {
                 case 10: instance.alarm10(); break
                 case 11: instance.alarm11(); break
               }
+              if (oldRoom !== room) { break }
             }
           }
         }
@@ -885,19 +885,24 @@ class GMLRoom {
     __gml_left_released = false
     __gml_middle_released = false
     __gml_right_released = false
+    const newfps = 1000 / Math.max(0.01, performance.now() - start)
+    fps_real = 0.9 * fps_real + 0.1 * newfps
   }
   
   create() {
     const id = rooms.indexOf(this),
       data = roomdatas[id]
-    let instances = []
-    for (const obj of data.objs) {
+    let instances = [] // NOTE: instance_create adds to current room
+    // this is so all instances can be created before any create events are called
+    for (const objData of data.objs) {
+      const obj = classes[Classes[objData.obj]].prototype
       if (obj.__persistent) {
-        if (this.__inited) {
+        if (obj.__inited) {
           continue
         }
+        obj.__inited = true
       }
-      instances.push(instance_create(obj.pos.x, obj.pos.y, classes[Classes[obj.obj]].prototype, true))
+      instances.push(instance_create(objData.pos.x, objData.pos.y, obj, true))
     }
     for (const instance of instances) {
       instance.create()
@@ -946,6 +951,20 @@ function __gml_proto_proxy(proto) {
 
 // begin mouse stuff
 
+canvas.addEventListener('keydown', e => {
+  const id = 'keypress' + e.keyCode
+  __gml_global_variables.forEach(obj => {
+    if (obj[id] !== noop) {
+      obj[id]()
+    }
+  })
+  __gml_current_room.instances.forEach(obj => {
+    if (obj[id] !== noop) {
+      obj[id]()
+    }
+  })
+})
+
 canvas.addEventListener('mousedown', e => {
   switch (e.button) {
     case 0: __gml_left_pressed = true; break
@@ -970,7 +989,7 @@ canvas.addEventListener('mouseup', e => {
 function __gml_activate(ax, ay, override=false) {
   __gml_physics_collection.forEach(obj => {
     const bx = obj.x, by = obj.y
-    let x = ax - bx - sprites[obj.sprite_index].origin.x, y = ay - by - sprites[obj.sprite_index].origin.y
+    let x = ax - bx + sprites[obj.sprite_index].origin.x, y = ay - by + sprites[obj.sprite_index].origin.y
     if (x >= 0 && y >= 0 && x < sprites[obj.sprite_index].size.width && y < sprites[obj.sprite_index].size.height && sprites[obj.sprite_index].colmasks.every(mask => mask.data(x, y))) {
       if (override || !obj.__active) {
         obj.__active = true
@@ -983,6 +1002,8 @@ function __gml_activate(ax, ay, override=false) {
       }
     }
   })
+  old_mouse_x = mouse_x
+  old_mouse_y = mouse_y
 }
 
 canvas.addEventListener('mousemove', e => {
