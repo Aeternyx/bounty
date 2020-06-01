@@ -1,0 +1,3 @@
+- `with (obj)` does not exist in js. use `obj.instances.forEach` instead. `all` is not an exception.
+- `string_replace_all` does inplace string modification. this does not exist in js
+- if a function wants to use `self`, 1. `var self = this`, 2. do `fn.call(self, ...args)` in caller

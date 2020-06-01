@@ -1,0 +1,23 @@
+# TODOs
+- [ ] fetishes?
+  - [ ] exhibitionism
+  - [ ] voyeurism
+  - [ ] masochism
+- [ ] convert success into {win: 3, small_win: 2, lose: 1}
+- [ ] confirm dialog/disallow buying weapons same tier as yours
+- [ ] doesn't make sense for tier to increase as distance from capital (read: noble land aka stronk land) increases
+- [ ] figure out how GML inheritance works. if at all lmaoooo. guess not
+- [ ] room_goto and uhh
+- [ ] i've included the prototype in `with` for now. it's the only way i see `obj_stats` working properly
+- [ ] fix anal bonerses
+- [ ] implement `room_goto`, `room_goto_next`, `room_goto_previous` and `draw_sprite` and `draw_sprite_ext`? and `draw_text`
+- [ ] remember to `.create()` all prototypes. can do this via sed, or in the engine. we'll see
+- [ ] `all` is all active instances in a room
+- [ ] trigger alarms. maintain a tick count and trigger alarms that are divisible
+- [ ] fix half elf shit (skipping room dont work 100%)
+- [ ] make correct stats display instantly. copying the stats over will work
+- [ ] clear class instances i guess. not hard, just `instance_destroy` on room close
+- [ ] stat text is not reset to white for some reason. weird
+- [ ] sort out instance_destroy and using the prototype and when to create new shit
+- [ ] call .destroy on objects
+- [ ] non prototype `.instances` should only return itself

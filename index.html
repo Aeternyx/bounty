@@ -1,0 +1,146 @@
+<html>
+  <head>
+    <title>Bounty</title>
+    <!-- <link rel="icon" href="https://cdn.glitch.com/aa7ba2ce-98dc-4149-8f6a-37c5b8bdfb42%2Ffavicon.ico?v=1589966180029"> -->
+    <link rel="icon" href="favicon.ico">
+    <!-- o boy -->
+    <script>
+    window.info = { name: 'Bounty' }
+    </script>
+    <script src="data/fonts.js" defer></script>
+    <script src="data/sprites.js" defer></script>
+    <script src="data/textures.js" defer></script>
+    <script src="data/roomdatas.js" defer></script>
+    
+    <script src="gml.js" defer></script>
+    
+    <script src="scripts/main.js" defer></script>
+    <script src="scripts/main2.js" defer></script>
+    <script src="scripts/main3.js" defer></script>
+    <script src="scripts/main4.js" defer></script>
+    <script src="scripts/main5.js" defer></script>
+    
+    <script src="classes/button_base.js" defer></script>
+    <script src="classes/dice.js" defer></script>
+    <script src="classes/dice_extra.js" defer></script>
+    <script src="classes/stats.js" defer></script>
+    <script src="classes/adv_button.js" defer></script>
+    <script src="classes/adv_main_creation.js" defer></script>
+    <script src="classes/char_button.js" defer></script>
+    <script src="classes/char_main.js" defer></script>
+    <script src="classes/subchar_button.js" defer></script>
+    <script src="classes/subchar_main.js" defer></script>
+    <script src="classes/timeline_button.js" defer></script>
+    <script src="classes/timeline_main.js" defer></script>
+    <script src="classes/subchar_bonuses.js" defer></script>
+    <script src="classes/start_new.js" defer></script>
+    <script src="classes/start_credits.js" defer></script>
+    <script src="classes/start_config.js" defer></script>
+    <script src="classes/general_next.js" defer></script>
+    <script src="classes/general_back.js" defer></script>
+    <script src="classes/general_goto_main.js" defer></script>
+    <script src="classes/general_last_room.js" defer></script>
+    <script src="classes/general_bounty.js" defer></script>
+    <script src="classes/general_gameover.js" defer></script>
+    <script src="classes/general_end.js" defer></script>
+    <script src="classes/general_restart.js" defer></script>
+    <script src="classes/general_restart_big.js" defer></script>
+    <script src="classes/option_button.js" defer></script>
+    <script src="classes/fame_button.js" defer></script>
+    <script src="classes/option_main.js" defer></script>
+    <script src="classes/fame_main.js" defer></script>
+    <script src="classes/main_options.js" defer></script>
+    <script src="classes/main_data.js" defer></script>
+    <script src="classes/main_status.js" defer></script>
+    <script src="classes/main_loc_main.js" defer></script>
+    <script src="classes/main_loc_button.js" defer></script>
+    <script src="classes/main_store.js" defer></script>
+    <script src="classes/main_food.js" defer></script>
+    <script src="classes/main_travel.js" defer></script>
+    <script src="classes/main_encounter.js" defer></script>
+    <script src="classes/encounter_repeat.js" defer></script>
+    <script src="classes/store_button.js" defer></script>
+    <script src="classes/store_main.js" defer></script>
+    <script src="classes/travel_button.js" defer></script>
+    <script src="classes/travel_reset.js" defer></script>
+    <script src="classes/travel_main.js" defer></script>
+    <script src="classes/road_goto_encounter.js" defer></script>
+    <script src="classes/location_button.js" defer></script>
+    <script src="classes/location_store.js" defer></script>
+    <script src="classes/location_scroll.js" defer></script>
+    <script src="classes/status_adv.js" defer></script>
+    <script src="classes/status_aff.js" defer></script>
+    <script src="classes/adv_main.js" defer></script>
+    <script src="classes/status_mask.js" defer></script>
+    <script src="classes/item_use.js" defer></script>
+    <script src="classes/item_drop.js" defer></script>
+    <script src="classes/data_save.js" defer></script>
+    <script src="classes/data_desc.js" defer></script>
+    <script src="classes/data_load.js" defer></script>
+    <script src="classes/data_main.js" defer></script>
+    <script src="classes/config_button.js" defer></script>
+    <script src="classes/config_main.js" defer></script>
+    <script src="classes/stat_block.js" defer></script>
+    <script src="classes/stat_block_2.js" defer></script>
+    <script src="classes/skill_block.js" defer></script>
+    <script src="classes/character_block.js" defer></script>
+    <script src="classes/advantage_block.js" defer></script>
+    <script src="classes/item_block.js" defer></script>
+    <script src="classes/equip_block.js" defer></script>
+    <script src="classes/affliction_block.js" defer></script>
+    <script src="classes/adv_reader.js" defer></script>
+    <script src="classes/race_reader.js" defer></script>
+    <script src="classes/equip_reader.js" defer></script>
+    <script src="classes/timeline_reader.js" defer></script>
+    <script src="classes/options_reader.js" defer></script>
+    <script src="classes/encounter.js" defer></script>
+    <script src="classes/day_begin.js" defer></script>
+    <script src="classes/travel.js" defer></script>
+    <script src="classes/location.js" defer></script>
+    <script src="classes/bounty.js" defer></script>
+    <script src="classes/main.js" defer></script>
+    <script src="classes/intro.js" defer></script>
+    <script src="classes/travel_block.js" defer></script>
+    <script src="classes/main_block.js" defer></script>
+    <script src="classes/timeline_map.js" defer></script>
+    <script src="classes/title_logo.js" defer></script>
+    <script src="classes/divider_fame.js" defer></script>
+    <script src="classes/credits_list.js" defer></script>
+
+    <script src="rooms/init.js" defer></script>
+    <script src="rooms/start.js" defer></script>
+    <script src="rooms/credits.js" defer></script>
+    <script src="rooms/timeline.js" defer></script>
+    <script src="rooms/intro1.js" defer></script>
+    <script src="rooms/intro2.js" defer></script>
+    <script src="rooms/intro3.js" defer></script>
+    <script src="rooms/creation1.js" defer></script>
+    <script src="rooms/creation1_2.js" defer></script>
+    <script src="rooms/creation2.js" defer></script>
+    <script src="rooms/creation3.js" defer></script>
+    <script src="rooms/main.js" defer></script>
+    <script src="rooms/store.js" defer></script>
+    <script src="rooms/options.js" defer></script>
+    <script src="rooms/config.js" defer></script>
+    <script src="rooms/status.js" defer></script>
+    <script src="rooms/advantages.js" defer></script>
+    <script src="rooms/afflictions.js" defer></script>
+    <script src="rooms/location.js" defer></script>
+    <script src="rooms/data.js" defer></script>
+    <script src="rooms/day_begin.js" defer></script>
+    <script src="rooms/encounter.js" defer></script>
+    <script src="rooms/bounty.js" defer></script>
+    <script src="rooms/travel.js" defer></script>
+    <script src="rooms/gameover.js" defer></script>
+    <script src="rooms/road.js" defer></script>
+    <script src="rooms/road_encounter.js" defer></script>
+    <script src="rooms/victory_1.js" defer></script>
+    <script src="rooms/victory_2.js" defer></script>
+    <script src="rooms/victory_3.js" defer></script>
+
+    <script src="start.js" defer></script>
+  </head>
+  <body>
+    <canvas id="gml_screen" width="640" height="480"></canvas>
+  </body>
+</html>
