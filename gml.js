@@ -836,7 +836,7 @@ class GMLRoom {
   constructor() {
     this.__inited = false
     this.instances = []
-    this.room_speed = 5 // 60
+    this.room_speed = 60
   }
   
   draw() {
