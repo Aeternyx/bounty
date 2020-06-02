@@ -158,9 +158,7 @@ window.round = Math.round
 
 // begin string
 
-function string(s) {
-    return String(s)
-}
+window.string = window.String
 
 function string_insert(bit, string, index) {
   return string.slice(0, index) + bit + string.slice(index)
@@ -516,6 +514,13 @@ function string_height_ext(string, sep, w) {
   return lines.length * h
 }
 
+for (const font of fonts) {
+  font.__maxWidth = font.chars.reduce((p, c) => p > c.frame.width ? p : c.frame.width, 0)
+}
+
+// TODO: lru, for if some dumbass wants rainbow text
+const __gml_color_font_cache = Array(fonts.length).fill().map(() => [])
+
 function draw_text(x, y, string) {
   const font = fonts[__gml_draw_config.font],
     lookup = fontlookups[__gml_draw_config.font],
@@ -533,9 +538,7 @@ function draw_text(x, y, string) {
     case VAligns.fa_bottom: y2 -= height; break
   }
   if (lineWidth !== -1) {
-    const minWidth = font.chars.reduce((p, c) => p < c.frame.width ? p : c.frame.width, 1000000000),
-      maxWidth = font.chars.reduce((p, c) => p > c.frame.width ? p : c.frame.width, 0),
-      minLength = Math.floor(lineWidth / maxWidth)
+    const minLength = lineWidth / font.__maxWidth
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
       if (line.length <= minLength) {
@@ -567,24 +570,34 @@ function draw_text(x, y, string) {
     by = image.src.y,
     halign = __gml_draw_config.halign;
   if (__gml_draw_config.color !== 0xffffff) {
-    tcanvas.width = sheet.width
-    tcanvas.height = sheet.height
-    tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
-    tctx.drawImage(sheet, image.src.x, image.src.y, image.src.width, image.src.height, 0, 0, image.dest.width, image.dest.height)
-    const sheetData = tctx.getImageData(0, 0, image.src.width, image.src.height)
-    const b = __gml_draw_config.color >> 16,
-      g = (__gml_draw_config.color >> 8) & 0xff,
-      r = __gml_draw_config.color & 0xff
-    for (let i = 0; i < sheetData.data.length; i += 4) {
-      sheetData.data[i + 0] *= r / 0xff;
-      sheetData.data[i + 1] *= g / 0xff;
-      sheetData.data[i + 2] *= b / 0xff;
-    }
     bx = 0
     by = 0
-    tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
-    tctx.putImageData(sheetData, 0, 0)
-    sheet = tcanvas.transferToImageBitmap()
+    const cached = __gml_color_font_cache[__gml_draw_config.font][__gml_draw_config.color]
+    if (cached) {
+      sheet = cached
+    } else {
+      tcanvas.width = sheet.width
+      tcanvas.height = sheet.height
+      tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
+      tctx.drawImage(sheet, image.src.x, image.src.y, image.src.width, image.src.height, 0, 0, image.dest.width, image.dest.height)
+      const sheetData = tctx.getImageData(0, 0, image.src.width, image.src.height)
+      const b = __gml_draw_config.color >> 16,
+        g = (__gml_draw_config.color >> 8) & 0xff,
+        r = __gml_draw_config.color & 0xff,
+        data = sheetData.data
+      for (let i = 0; i < data.length; i += 4) {
+        data[i] *= r / 0xff;
+      }
+      for (let i = 1; i < data.length; i += 4) {
+        data[i] *= g / 0xff;
+      }
+      for (let i = 2; i < data.length; i += 4) {
+        data[i] *= b / 0xff;
+      }
+      tctx.clearRect(0, 0, tcanvas.width, tcanvas.height)
+      tctx.putImageData(sheetData, 0, 0)
+      sheet = __gml_color_font_cache[__gml_draw_config.font][__gml_draw_config.color] = tcanvas.transferToImageBitmap()
+    }
   }
   for (let line of lines) {
     let width = Array.from(line).reduce((p, c) => p + lookup[c].shift, 0),
