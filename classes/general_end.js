@@ -22,4 +22,6 @@ class GeneralEnd extends ButtonBase {
 }
 
 window.classes.push(GeneralEnd)
+/* globals Sprites */
+GeneralEnd.prototype.sprite_index = Sprites.spr_button_round
 window.obj_general_end = __gml_proto_proxy(GeneralEnd.prototype)

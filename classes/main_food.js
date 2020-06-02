@@ -47,13 +47,14 @@ class MainFood extends ButtonBase {
         if (obj_stats.food === 4) {
           obj_stats.food = 1
         }
+        self.pressed = 0
       } else if (self.pressed === MouseButtons.right) {
         obj_stats.food -= 1
         if (obj_stats.food === 0) {
           obj_stats.food = 3
         }
+        self.pressed = 0
       }
-      self.pressed = 0
     } else {
       self.locked = true
     }

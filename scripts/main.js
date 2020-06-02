@@ -462,6 +462,11 @@ function advantage_exist(advantage) {
 
 function button_click() {
   const self = this
+  if ('__override_button' in self) {
+    self.pressed = self.__override_button
+    delete self.__override_button
+    return
+  }
   if (self.active) {
     if (mouse_check_button_pressed(1) || mouse_check_button_pressed(2)) {
       self.pressed = MouseButtons.pressed

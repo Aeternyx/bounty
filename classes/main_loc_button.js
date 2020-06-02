@@ -11,8 +11,7 @@ class MainLocButton extends ButtonBase {
     button_click.call(self)
     if (self.no_use) {
       self.locked = true
-    }
-    if (self.pressed === MouseButtons.left) {
+    } else if (self.pressed === MouseButtons.left) {
       obj_stats.location_now = string(self.number)
       room_goto(Rooms.rm_location)
       self.pressed = 0

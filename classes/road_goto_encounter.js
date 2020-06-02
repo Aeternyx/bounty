@@ -18,4 +18,6 @@ class RoadGotoEncounter extends ButtonBase {
 }
 
 window.classes.push(RoadGotoEncounter)
+/* globals Sprites */
+RoadGotoEncounter.prototype.sprite_index = Sprites.spr_button_round
 window.obj_road_goto_encounter = __gml_proto_proxy(RoadGotoEncounter.prototype)

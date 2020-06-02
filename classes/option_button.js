@@ -129,7 +129,7 @@ class OptionButton extends ButtonBase {
         }
         break
       case "Hands":
-        switch (obj_stats.o_oral) {
+        switch (obj_stats.o_hands) {
           case 1: self.text2 = "Resist"; break
           case 2: self.text2 = "Decline"; break
           case 3: self.text2 = "Accept"; break

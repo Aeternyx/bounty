@@ -186,7 +186,7 @@ function load_game(save_num) {
   self.sick_h = ini_read_real(slot, "AFH", self.sick_h)
   self.stage_tier = ini_read_real(slot, "STT", self.stage_tier)
   self.stage = ini_read_real(slot, "STS", self.stage)
-  self.pregnant = !!ini_read_real(slot, "PRG", self.pregnant)
+  self.pregnant = ini_read_real(slot, "PRG", self.pregnant) !== 0
   self.loc_1_trt = ini_read_real(slot, "L1R", self.loc_)
   self.loc_2_trt = ini_read_real(slot, "L2R", self.loc_)
   self.loc_3_trt = ini_read_real(slot, "L3R", self.loc_)
@@ -305,7 +305,7 @@ function save_game(save_num) {
   ini_write_real(slot, "AFH", self.sick_h)
   ini_write_real(slot, "STT", self.stage_tier)
   ini_write_real(slot, "STS", self.stage)
-  ini_write_real(slot, "PRG", self.pregnant)
+  ini_write_real(slot, "PRG", +self.pregnant)
   ini_write_real(slot, "L1R", self.loc_1_trt)
   ini_write_real(slot, "L2R", self.loc_2_trt)
   ini_write_real(slot, "L3R", self.loc_3_trt)
@@ -446,7 +446,7 @@ function town_gen() {
   }
   obj_stats.loc_1_race = i
   if (obj_stats.location < 7 /* Locations.island */) {
-    roll = irandom_range(1, 7)
+    roll = irandom_range(1, 6)
   } else {
     roll = irandom_range(1, 6)
   }
@@ -468,12 +468,10 @@ function town_gen() {
   }
   obj_stats.loc_2_race = i
   if (obj_stats.location < 7 /* Locations.island */) {
-    roll = irandom_range(1, 6)
+    roll = irandom_range(1, 7)
   } else {
-    // NOTE: lmao. same thign on both branches
     roll = irandom_range(1, 6)
   }
-  // NOTE: never executed; can never roll 7 atm
   if (roll === 7) {
     roll += obj_stats.location - 1
   }

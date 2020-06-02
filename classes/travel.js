@@ -60,7 +60,7 @@ class Travel extends GMLObject {
     }
     if (self.encounter > 0) {
       obj_general_goto_main.instances.forEach(self => {
-        instance_change(obj_road_goto_encounter, true)
+        instance_change.call(self, obj_road_goto_encounter, true)
       })
       self.roll = irandom_range(1, 4) // NOTE: ew. was ew random floor thing
       switch (self.roll) {

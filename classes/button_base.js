@@ -97,8 +97,18 @@ class ButtonBase extends GMLObject {
   // mouse11
   mouseleave() {
     super.mouseleave()
-    let self = this
+    const self = this
     self.active = false
+  }
+  
+  // ctrl
+  keypress17() {
+    super.keypress17()
+    const self = this
+    if (self.sprite_index === Sprites.spr_button_round) {
+      self.__override_button = MouseButtons.left
+      self.step()
+    }
   }
 }
 

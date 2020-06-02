@@ -237,6 +237,11 @@ class Stats extends GMLObject {
         draw_text(xx, i, "Virginity lost")
         i += ii
       }
+      if (self.pregnant) {
+        draw_set_color(Colors.c_gray)
+        draw_text(xx, i, "Pregnant")
+        i += ii
+      }
     }
     if (instance_exists(obj_skill_block)) {
       let xx = obj_skill_block.x
@@ -513,18 +518,17 @@ class Stats extends GMLObject {
             draw_sprite(Sprites.spr_towns_races, 3, xx + 80, i + 20)
             break
           case Races.mixed:
-            // NOTE: 1 0 2 lmao seems a bit arbitrary. also no orcs big gae
             draw_sprite(Sprites.spr_towns_races, 1, xx + 60, i + 20)
             draw_sprite(Sprites.spr_towns_races, 0, xx + 70, i + 20)
             draw_sprite(Sprites.spr_towns_races, 2, xx + 80, i + 20)
             break
         }
         i += 40
-        draw_sprite_ext(Sprites.spr_towns, self.loc_2_type - 1, xx, i, 1, 1, 0, Colors.c_white, 1)
+        draw_sprite_ext(Sprites.spr_towns, self.loc_3_type - 1, xx, i, 1, 1, 0, Colors.c_white, 1)
         if (self.loc_3_trt <= 2) {
           draw_sprite(Sprites.spr_towns_bonus, self.loc_3_trt - 1, xx + 40, i + 20)
         }
-        draw_text(xx + 42, i, string(self.loc_1_name))
+        draw_text(xx + 42, i, string(self.loc_3_name))
         switch (self.loc_3_race) {
           case Races.human:
             draw_sprite(Sprites.spr_towns_races, 0, xx + 60, i + 20)
@@ -547,7 +551,6 @@ class Stats extends GMLObject {
             draw_sprite(Sprites.spr_towns_races, 3, xx + 80, i + 20)
             break
           case Races.mixed:
-            // NOTE: 1 0 2 lmao seems a bit arbitrary. also no orcs big gae
             draw_sprite(Sprites.spr_towns_races, 1, xx + 60, i + 20)
             draw_sprite(Sprites.spr_towns_races, 0, xx + 70, i + 20)
             draw_sprite(Sprites.spr_towns_races, 2, xx + 80, i + 20)
@@ -563,7 +566,6 @@ class Stats extends GMLObject {
       draw_set_font(Fonts.f_console)
       draw_text(0, 462, string(self.fpsreal.toFixed(2)))
     }
-    // TODO
   }
   
   alarm0() {
@@ -588,6 +590,42 @@ class Stats extends GMLObject {
     const self = this
     if (self.debug) {
       self.cash += 100
+    }
+  }
+  
+  // f
+  keypress70() {
+    super.keypress70()
+    const self = this
+    if (self.debug) {
+      add_fame(1)
+    }
+  }
+  
+  // h
+  keypress72() {
+    super.keypress72()
+    const self = this
+    if (self.debug) {
+      self.hygiene += 10
+    }
+  }
+  
+  // l
+  keypress76() {
+    super.keypress76()
+    const self = this
+    if (self.debug) {
+      self.life += 10
+    }
+  }
+  
+  // m
+  keypress77() {
+    super.keypress77()
+    const self = this
+    if (self.debug) {
+      self.mood += 10
     }
   }
   
@@ -648,6 +686,6 @@ class Stats extends GMLObject {
 }
 
 window.classes.push(Stats)
-Stats.prototype.__persistent = true
+Stats.prototype.persistent = true
 Stats.prototype.depth = -1
 window.obj_stats = __gml_proto_proxy(Stats.prototype)

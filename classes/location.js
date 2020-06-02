@@ -277,7 +277,7 @@ class Location extends GMLObject {
     super.step()
     let self = this
     if (self.scroll) {
-      self.yy = self.y - 240 * self.scale * obj_location_scroll.position / 100
+      self.yy = self.y - self.scale * obj_location_scroll.position
     }
   }
 }

@@ -22,3 +22,5 @@
 - [ ] call .destroy on objects
 - [ ] non prototype `.instances` should only return itself
 - [ ] reset obj_stats on game restart
+- [ ] duplicated names?
+- [ ] it gets really slow after a while for some reason
