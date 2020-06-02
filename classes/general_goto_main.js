@@ -11,6 +11,10 @@ class GeneralGotoMain extends ButtonBase {
     button_click.call(self)
     self.text = "Menu"
     if (self.pressed === MouseButtons.left) {
+      if (room === Rooms.rm_debug) {
+        obj_stats.debug = false
+        delete obj_stats.alarm[0]
+      }
       room_goto(Rooms.rm_main)
       self.pressed = 0
     }

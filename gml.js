@@ -912,11 +912,6 @@ let __gml_left_pressed = false,
   __gml_right_released = false
 
 class GMLRoom {
-  constructor() {
-    this.__inited = false
-    this.room_speed = 60
-  }
-  
   draw() {
     ctx.fillStyle = "black"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -1070,9 +1065,7 @@ class GMLRoom {
     for (const instance of instances) {
       instance.create()
     }
-    this.__inited = true
   }
-  // TODO: lmao
   
   destroy(restart=false) {
     const id = rooms.indexOf(this.constructor),
@@ -1097,7 +1090,8 @@ function __gml_proto_proxy(proto) {
       if (obj2 === undefined) {
         obj2 = proto
       }
-      return obj2[prop]
+      const result = obj2[prop]
+      return typeof result === 'function' ? result.bind(obj2) : result
     },
     set: function(obj, prop, val) {
       if (prop === 'instances') { return clazz.instances }
@@ -1212,7 +1206,7 @@ function drawit() {
   const end = performance.now()
   const newfps = 1000 / Math.max(0.01, end - start)
   fps_real = 0.9 * fps_real + 0.1 * newfps
-  __gml_draw_handle = setTimeout(drawit, Math.max(0, 1000 / __gml_current_room.room_speed - (end - start)))
+  __gml_draw_handle = setTimeout(drawit, Math.max(0, 1000 / roomdatas[room].speed - (end - start)))
 }
 
 function dewit(room) {

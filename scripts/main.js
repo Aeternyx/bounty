@@ -167,7 +167,9 @@ const Classes = window.Classes = {
   obj_title_logo: 83,
   obj_divider_fame: 84,
   obj_credits_list: 85,
-  obj_credits_list: 85,
+  obj_main_debug: 86,
+  obj_debug_button: 87,
+  obj_debug_main: 88,
 }
 
 const Rooms = window.Rooms = {
@@ -201,6 +203,7 @@ const Rooms = window.Rooms = {
   rm_victory_1: 27,
   rm_victory_2: 28,
   rm_victory_3: 29,
+  rm_debug: 30,
 }
 
 const Fonts = window.Fonts = {

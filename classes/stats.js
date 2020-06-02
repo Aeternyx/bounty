@@ -677,6 +677,7 @@ class Stats extends GMLObject {
       case Rooms.rm_data: i = "Data"; break
       case Rooms.rm_options: i = "Options"; break
       case Rooms.rm_config: i = "Configuration"; break
+      case Rooms.rm_debug: i = "Debug"; break
       default: i = ""; break
     }
     self.title_text = i
