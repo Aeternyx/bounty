@@ -651,6 +651,9 @@ class Stats extends GMLObject {
       self.debug = true
       self.alarm[0] = 30
     }
+    if (room === Rooms.rm_main) {
+      room_restart()
+    }
   }
   
   roomstart() {

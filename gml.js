@@ -1133,6 +1133,7 @@ canvas.addEventListener('mousedown', e => {
 })
 
 canvas.addEventListener('contextmenu', e => {
+  __gml_right_released = true
   e.preventDefault()
   e.stopPropagation()
 })

@@ -23,6 +23,12 @@ class Main extends GMLObject {
       i = "Bounty hunters have arrived in the city to search for you - you are not safe here."
     }
     self.text = string(obj_stats.location_name) + " " + get_text_town_desc(obj_stats.location) + "##" + string(i)
+    
+    if (!obj_stats.debug && !window.matchMedia("(pointer: coarse)").matches) {
+      obj_main_debug.instances.forEach(self => {
+        instance_destroy.call(self)
+      })
+    }
   }
   
   // draw
