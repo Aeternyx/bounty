@@ -9,7 +9,6 @@ class Stats extends GMLObject {
     super.create()
     const self = this
     self.debug = false
-    self.alarm[0] = 30
     self.fpsreal = fps_real
     self.data = 0
     self.last_room = room
@@ -581,6 +580,9 @@ class Stats extends GMLObject {
     const self = this
     if (self.debug) {
       self.actions = 1
+      if (room === Rooms.rm_main) {
+        room_restart()
+      }
     }
   }
   
@@ -644,8 +646,10 @@ class Stats extends GMLObject {
     const self = this
     if (self.debug) {
       self.debug = false
+      delete self.alarm[0]
     } else {
       self.debug = true
+      self.alarm[0] = 30
     }
   }
   

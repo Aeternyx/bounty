@@ -12,6 +12,7 @@ const SkillTypes = window.SkillTypes = {
   sword: 5,
   axe: 6,
   weapon: 7,
+  gangbang: 8,
 }
 
 const Sprites = window.Sprites = {
@@ -236,6 +237,7 @@ const Locations = window.Locations = {
   barracks: 12,
   slaver_camp: 13,
 }
+// NOTE: proper names: Island, Capital, Enclave, Cult, Eastern, and Barbarian
 
 const AttackedActions = window.AttackedActions = {
   submit: 0,
@@ -498,17 +500,12 @@ function button_create(x, yy) {
 }
 
 function cap_stat(stat, stat_cap, stat_change) {
-  if (stat <= stat_cap) {
-    if (stat_change < 0) {
-      // do nothing
-    } else {
-      stat += stat_change
-      if (stat > stat_cap) {
-        stat = stat_cap
-      }
-      if (stat < 0) {
-        stat = 0
-      }
+  if (stat <= stat_cap || stat_change < 0) {
+    stat += stat_change
+    if (stat > stat_cap) {
+      stat = stat_cap
+    } else if (stat < 0) {
+      stat = 0
     }
   }
   return stat
@@ -1006,6 +1003,10 @@ function get_race(race, subrace) {
 
 function get_request(num) {
   i = SkillTypes.none
+  if (advantage_exist(Advantages.gangbang_slut)) {
+    num += 1
+  }
+  // NOTE: used to be vvaooh; now vvaohgg
   switch (num) {
     case 1:
     case 2:
@@ -1015,11 +1016,14 @@ function get_request(num) {
       i = SkillTypes.anal
       break
     case 4:
-    case 5:
       i = SkillTypes.oral
       break
-    case 6:
+    case 5:
       i = SkillTypes.hands
+      break
+    case 6:
+    case 7:
+      i = SkillTypes.gangbang
       break
   }
   if (advantage_exist(Advantages.perfect_ass)) {
@@ -1028,7 +1032,7 @@ function get_request(num) {
         i = SkillTypes.anal
         break
       case SkillTypes.anal:
-        // NOTE: wait wut. double checked tho
+        // NOTE: to swap the chances i guess. note that this does not affect chances w/ gangbang slut
         i = SkillTypes.vaginal
         break
     }
@@ -1181,10 +1185,10 @@ function location_store_create() {
 function stat_color(stat) {
   switch (stat_low(stat)) {
     case StatLevels.low:
-      draw_set_color(0xff3232)
+      draw_set_color(make_color_rgb(255, 50, 50))
       break
     case StatLevels.medium:
-      draw_set_color(0xffc832)
+      draw_set_color(make_color_rgb(255, 200, 50))
       break
     case StatLevels.high:
       draw_set_color(Colors.c_white)

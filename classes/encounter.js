@@ -3,7 +3,7 @@
 /* globals Advantages, Races, Dangers, SkillTypes, Prices, Fonts */
 // functions mostly
 /* globals obj_stats, get_request, get_text_customer, roll_d6, advantage_exist, cap_stat, stat_low, irandom_range, string_insert, string_length, check_skill, pregnancy, level_up_check, get_text_encounter_request */
-/* globals mood_modify, life_modify, get_afflictions, check_allure, check_multi, draw_cash */
+/* globals mood_modify, life_modify, get_afflictions, check_allure, check_multi, draw_cash, do_gangbang_encounter */
 // get_text
 /* globals get_text_danger, get_text_encounter_v, get_text_encounter_a, get_text_encounter_o, get_text_encounter_h */
 class Encounter extends GMLObject {
@@ -37,9 +37,14 @@ class Encounter extends GMLObject {
     } else {
       instance_create(580, 400, obj_general_goto_main)
     }
-    self.text = get_text_customer()
     let i = roll_d6(0, "Request type")
     self.type = get_request(i)
+    if (self.type === SkillTypes.gangbang) {
+      self.type = SkillTypes.oral
+      // do_gangbang_encounter.call(self)
+      // return
+    }
+    self.text = get_text_customer()
     let ii = 0
     switch (self.type) {
       case SkillTypes.vaginal:
@@ -58,12 +63,14 @@ class Encounter extends GMLObject {
           ii += 1
         }
         break
-      case SkillTypes.hands:
-        i = roll_d6(ii, "Request internal")
-        break
       default:
         i = 0
         break
+    }
+    if (self.type !== SkillTypes.hands) {
+      i = roll_d6(ii, "Request internal")
+    } else {
+      i = 0
     }
     let inside = i >= 5
     if (obj_stats.negotiate_used > 0) {
@@ -447,13 +454,13 @@ class Encounter extends GMLObject {
       i += 13
       draw_text(self.x, self.y + i, "-" + string(-self.damage) + " Life")
     }
-    if (self.mood < 0) {
+    if (self.mood !== 0) {
       i += 13
-      draw_text(self.x, self.y + i, "-" + string(-self.mood) + " Mood")
+      draw_text(self.x, self.y + i, (self.mood > 0 ? "+" : "-") + string(abs(self.mood)) + " Mood")
     }
-    if (self.hygiene > 0) {
+    if (self.hygiene !== 0) {
       i += 13
-      draw_text(self.x, self.y + i, "-" + string(self.hygiene) + " Hygiene")
+      draw_text(self.x, self.y + i, (self.hygiene > 0 ? "+" : "-") + string(abs(self.hygiene)) + " Hygiene")
     }
     i += 26
     if (obj_stats.encounters === 0) {

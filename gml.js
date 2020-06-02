@@ -154,6 +154,8 @@ window.ceil = Math.ceil
 
 window.round = Math.round
 
+window.abs = Math.abs
+
 // end math
 
 // begin string
@@ -425,6 +427,10 @@ const Colors = window.Colors = {
   c_dark_red: 0x000080,
   c_dark_green: 0x008000,
   c_dark_blue: 0x800000,
+}
+
+function make_color_rgb(r, g, b) {
+  return b << 16 | g << 8 | r
 }
 
 const VAligns = window.VAligns = {
@@ -779,8 +785,8 @@ class GMLObject {
 
 GMLObject.prototype.persistent = false
 GMLObject.prototype.depth = 0
-GMLObject.prototype.x = GMLObject.prototype.xstart = 0
-GMLObject.prototype.y = GMLObject.prototype.ystart = 
+GMLObject.prototype.x = GMLObject.prototype.xstart = GMLObject.prototype.xprevious = 0
+GMLObject.prototype.y = GMLObject.prototype.ystart = GMLObject.prototype.yprevious = 0
 GMLObject.prototype.sprite_index = 0
 GMLObject.prototype.image_index = 0
 GMLObject.prototype.image_alpha = 1 // TODO: shit like this
@@ -895,6 +901,8 @@ class GMLRoom {
       __gml_to_step = []
       for (const instance of to_step) {
         if (instance.beginstep === noop) { continue }
+        instance.xprevious = instance.x
+        instance.yprevious = instance.y
         instance.beginstep()
         if (oldRoom !== room) { break }
       }
@@ -905,6 +913,8 @@ class GMLRoom {
       __gml_to_step = []
       for (const instance of to_step) {
         if (instance.beginstep === noop) { continue }
+        instance.xprevious = instance.x
+        instance.yprevious = instance.y
         instance.beginstep()
         if (oldRoom !== room) { break }
       }
