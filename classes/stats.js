@@ -236,7 +236,7 @@ class Stats extends GMLObject {
         draw_text(xx, i, "Virginity lost")
         i += ii
       }
-      if (self.pregnant) {
+      if (self.debug && self.pregnant) {
         draw_set_color(Colors.c_gray)
         draw_text(xx, i, "Pregnant")
         i += ii

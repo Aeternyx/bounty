@@ -9,19 +9,19 @@ class LocationStore extends GMLObject {
     super.create()
     let self = this
     self.b1_type = 0
-    self.b1_name = 0
+    self.b1_name = null
     self.b1_cost = 0
     self.b2_type = 0
-    self.b2_name = 0
+    self.b2_name = null
     self.b2_cost = 0
     self.b3_type = 0
-    self.b3_name = 0
+    self.b3_name = null
     self.b3_cost = 0
     self.b4_type = 0
-    self.b4_name = 0
+    self.b4_name = null
     self.b4_cost = 0
     self.b5_type = 0
-    self.b5_name = 0
+    self.b5_name = null
     self.b5_cost = 0
     self.inst = null
     self.level = 1

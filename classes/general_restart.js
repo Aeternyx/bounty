@@ -17,4 +17,6 @@ class GeneralRestart extends ButtonBase {
 }
 
 window.classes.push(GeneralRestart)
+/* globals Sprites */
+GeneralNext.prototype.sprite_index = Sprites.spr_button_round
 window.obj_general_restart = __gml_proto_proxy(GeneralRestart.prototype)

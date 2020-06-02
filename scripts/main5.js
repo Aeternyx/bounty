@@ -34,9 +34,9 @@ function get_text_location(location) {
       break
     case "Docks - Visit Stalls":
       i = "Most of the stalls are selling things you aren't interested in. Others are selling exotic trinkets at prices you couldn't possibly afford."
-      location_store_button(7, "Soap", 3)
-      location_store_button(7, "Luxurious soap", 10)
-      location_store_button(6, "Silver combs", 46)
+      location_store_button.call(self, 7, "Soap", 3)
+      location_store_button.call(self, 7, "Luxurious soap", 10)
+      location_store_button.call(self, 6, "Silver combs", 46)
       break
     case "Docks - Follow Sailors":
       i = "You follow some of the sailors onto their ship as they carry the keg underneath the deck. Everyone is cheering, drinking, swearing, and dancing, and you're quickly pushed into the thick of it all. You drink while flashing your thighs and brushing against sailors, before one of them pulls you onto his lap. He roughly squeezes your breasts as another approaches you from the front and kisses you. Reaching down, you stroke the two of them through their pants, as they press up against you. ##It doesn't take long before both of them are exposed. The one underneath you presses against your ass, slowly driving inside of you. Just as soon as he's all the way in, the other sailor slips into your pussy. You're bounced up and down in the man's lap, being fucked in both holes. The drunken pleasure becomes too much, and you shriek and moan, while other sailors applaud and cheer. You're pressed firmly from both sides as they both fill your body with their cum. ##When the sailor pulls out of your pussy, another immediately takes his place. His cock easily slips into your cum-filled pussy as the fucking continues. In just a few minutes, you're being pressed against as you're being filled up again. ##As he pulls out, you get off of the first sailor's cock and stand up, cum dripping from your body. One of the sailors slips you a small purse filled with coins as you stumble off of the ship."
@@ -138,9 +138,9 @@ function get_text_location(location) {
     case "Shady Shop - Search Junk":
       // i = "It seems like you've spent an eternity rummaging through the junk in the shop."
       i = "After spending what feels like an eternity rummaging through the junk in the shop, you find some items that might be useful."
-      location_store_button(7, "Soap", 4)
-      location_store_button(7, "Spermicide", 18)
-      location_store_button(6, "Elven cloak", 198)
+      location_store_button.call(self, 7, "Soap", 4)
+      location_store_button.call(self, 7, "Spermicide", 18)
+      location_store_button.call(self, 6, "Elven cloak", 198)
       break
     case "Shady Shop - Work Glory Hole":
       roll = roll_d6(0, "Serviced") + roll_d6(0, "Serviced 2") + obj_stats.oral
@@ -270,8 +270,8 @@ function get_text_location(location) {
     case "Magic Shop - Search Shop":
       if (inventory_exist("Apprentice's degree", 0)) {
         i = "Searching through the shop, you find a collection of scrolls that you could invoke the spells within."
-        location_store_button(7, "Scroll of Rejuvenation", 78)
-        location_store_button(7, "Scroll of Charm", 82)
+        location_store_button.call(self, 7, "Scroll of Rejuvenation", 78)
+        location_store_button.call(self, 7, "Scroll of Charm", 82)
       } else {
         i = "Searching through the shop, you find many interesting trinkets, but nothing that you could afford, let alone understand."
       }
@@ -323,9 +323,9 @@ function get_text_location(location) {
       break
     case "Armory - Request Equipment":
       i = "You approach the quartermaster. He agrees to sell you military weapons, but at a hefty price."
-      location_store_button(1, "Sword", 100 * self.level * self.level)
-      location_store_button(2, "Axe", 100 * self.level * self.level)
-      location_store_button(6, "Buckler", 62)
+      location_store_button.call(self, 1, "Sword", 100 * self.level * self.level)
+      location_store_button.call(self, 2, "Axe", 100 * self.level * self.level)
+      location_store_button.call(self, 6, "Buckler", 62)
       break
     case "Tavern":
       i = "This large tavern is otherwise unimpressive, except for the huge amount of soldiers inside. Many maids carry food and drink to booths crowded with drunken soldiers. ##If you can cook, they are short on hands in the kitchen. There's plenty of drink for someone looking to pass some time. Otherwise, a lot of the soldiers could use some company."
@@ -497,9 +497,9 @@ function get_text_location(location) {
       break
     case "Forum - Visit Merchants":
       i = "Looking around the shops surround the forum, there's a few things you might be interested in."
-      location_store_button(7, "Perfume", 7)
-      location_store_button(7, "Luxurious soap", 8)
-      location_store_button(7, "Spermicide", 19)
+      location_store_button.call(self, 7, "Perfume", 7)
+      location_store_button.call(self, 7, "Luxurious soap", 8)
+      location_store_button.call(self, 7, "Spermicide", 19)
       break
     case "Forum - Advertise":
       i = "To say this place is crowded would be an understatement. There's a lot of potential customers in this place. All you have to do is get the word out without being discovered by the guards. ##You move from group to group, trying to entice people as you move. Not every attempt is successful, since this place is also filled with women and families. Still, you continue your undercover groping through the crowds. ##When you notice one of the people you approached talking with one of the guards, you quickly flee the scene. It's probably going to help the bounty hunters pick up on your trail, but it's a risk you are willing to take for the chance at some more money."
@@ -591,9 +591,9 @@ function get_text_location(location) {
       break
     case "General Store - Search Store":
       i = "Looking through the shelves, you find a few things you might be able to make use of."
-      location_store_button(7, "Soap", 4)
-      location_store_button(7, "Scented candle", 8)
-      location_store_button(7, "Tonic", 21)
+      location_store_button.call(self, 7, "Soap", 4)
+      location_store_button.call(self, 7, "Scented candle", 8)
+      location_store_button.call(self, 7, "Tonic", 21)
       break
     case "General Store - Dirty Job":
       i = "You can gather what's about to happen just by the look the shopkeep is throwing your way. ##The chubby man waves toward you, inviting you to come behind the counter. You look around, but he stops and tells you to just climb over to his side. ##After touching down, he immediately pulls you close and slips his tongue into your mouth. You don't even have time to react before he's released you, pushing down on your head. You understand what he's doing and obediently fall to your knees, noticing he's been exposed and erect this whole time. But before you do anything, he stands to your side and nudges you underneath the counter. A small ridge only inches long obscures you from being seen from above. ##Hiding under the counter, you run one hand along his shaft, feeling his cock pulsate. Pressing your tongue against the tip, you slowly insert him into your mouth, using your hands to slowly pull him in. ##The door closes, and you hear someone walking around the store. You stop for a few seconds, but he taps his knee against you, signaling you to get back to work. You slowly move your head back and forth, quietly sucking. ##The door opens and closes again, and more people walk into the shop. You continue servicing him as he services the customers. ##Unexpectedly, the shopkeep leans forward to reach for something, and his cock is quickly thrust into your throat, your head pressed firmly between his hips and the counter. Without warning, his cock swells up and his cum begins pouring into your throat. Your coughs are muffled by his body and the counter, and nobody knows that you're being forced to swallow his cum while he does business. ##Once the men are out of the shop, he pulls out of your mouth, and you lean forward coughing, cum oozing out of your nose. He hands you the coins in his hands for a job well done, and you vault back over the counter and leave the store."
@@ -625,8 +625,8 @@ function get_text_location(location) {
       break
     case "Tea House - Visit Merchant":
       i = "You talk with the merchant, and he agrees to show you his wares."
-      location_store_button(7, "Soap", 4)
-      location_store_button(6, "Silken sheets", 218)
+      location_store_button.call(self, 7, "Soap", 4)
+      location_store_button.call(self, 6, "Silken sheets", 218)
       break
     case "Garden":
       i = "You follow a path of stones alongside a pond as it leads you through various beds of flowers and small trees. This place is extremely peaceful, and after exploring it, surprisingly large. Visitors to the garden mind their own business as they come and go. ##There is an empty spot next to the pond that would be a great place to relax. If you're feeling risky, a man offers you some coin to help him with an 'experiment'."

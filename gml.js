@@ -276,7 +276,6 @@ function instance_create(x, y, proto, room_start=false) {
   }
   result.xstart = result.x = x
   result.ystart = result.y = y
-  result.__room = room
   if (result.__global) {
     __gml_global_variables.push(result)
   } else {
@@ -302,7 +301,7 @@ function instance_destroy(instance=null) {
   if (instance === null) {
     instance = this
   }
-  // TODO: i guess de-render too?
+  instance.destroy()
   let clazz = instance.constructor
   while (clazz !== __baseproto) {
     let instances = clazz.instances
@@ -320,13 +319,13 @@ function instance_destroy(instance=null) {
       __gml_room_variables.splice(index, 1)
     }
   }
-  __gml_physics_collection.remove(instance)
 }
 
 function instance_exists(obj) {
   // NOTE: proxy forwards constructor fine
-  if (!obj.constructor.hasOwnProperty('instances')) { obj.constructor.instances = [] }
-  return obj.instances.some(inst => inst.__room === room)
+  const clazz = obj.constructor
+  if (!clazz.hasOwnProperty('instances')) { clazz.instances = [] }
+  return __gml_global_variables.some(obj2 => obj2 instanceof clazz)  || __gml_room_variables.some(obj2 => obj2 instanceof clazz)
 }
 
 function instance_change(type, call_events=false) {
@@ -411,26 +410,106 @@ let __gml_alpha = 1
 
 const Colors = window.Colors = {
   c_white: 0xffffff,
-  c_light_gray: 0xc0c0c0,
+  c_silver: 0xc0c0c0,
+  c_ltgray: 0xc0c0c0,
   c_gray: 0x808080,
-  c_dark_gray: 0x404040,
+  c_dkgray: 0x404040,
   c_black: 0x000000,
   c_aqua: 0xffff00,
-  c_magenta: 0xff00ff,
+  c_fuchsia: 0xff00ff,
   c_yellow: 0x00ffff,
-  c_dark_aqua: 0x808000,
-  c_dark_magenta: 0x800080,
-  c_dark_yellow: 0x008080,
+  c_teal: 0x808000,
+  c_purple: 0x800080,
+  c_olive: 0x008080,
   c_red: 0x0000ff,
-  c_green: 0x00ff00,
+  c_lime: 0x00ff00,
   c_blue: 0xff0000,
-  c_dark_red: 0x000080,
-  c_dark_green: 0x008000,
-  c_dark_blue: 0x800000,
+  c_maroon: 0x000080,
+  c_green: 0x008000,
+  c_navy: 0x800000,
+  c_orange: 0x40a0ff,
 }
+
+function color_get_red(color) {
+  return color & 0xff
+}
+
+function color_get_green(color) {
+  return (color >> 8) & 0xff
+}
+
+function color_get_blue(color) {
+  return color >> 16
+}
+
+function color_get_hue(color) {
+  const r = (color & 0xff) / 255,
+    g = ((color >> 8) & 0xff) / 255
+    b = (color >> 16) / 255
+  let max = r, min = r
+  if (g > max) { max = g }
+  else if (g < min) { min = g }
+  if (b > max) { max = b }
+  else if (b < min) { min = b }
+  const hue = 0
+  if (min === max) {
+    return 0
+  }
+  if (r >= g && r >= b) {
+    hue = (g - b) / (max - min)
+    return Math.round(hue < 0 ? hue * 255 / 6 + 255 : hue * 255 / 6)
+  } else if (g >= r && g >= b) {
+    hue = 2 + (b - r) / (max - min)
+    return Math.round(hue < 0 ? hue * 255 / 6 + 255 : hue * 255 / 6)
+  } else {
+    hue = 4 + (r - g) / (max - min)
+    return Math.round(hue < 0 ? hue * 255 / 6 + 255 : hue * 255 / 6)
+  }
+}
+
+/* TODO:
+colour_get_saturation
+colour_get_value
+draw_getpixel
+draw_getpixel_ext
+draw_get_colour
+draw_get_alpha
+*/
 
 function make_color_rgb(r, g, b) {
   return b << 16 | g << 8 | r
+}
+
+function make_color_hsv(h_, s, v) {
+  const c_ = v * s / 65025,
+    x_ = c * (1 - Math.abs(h / 60 % 2 - 1))
+    h = h_ * 360 / 255,
+    m = v / 255 - c,
+    c = Math.round((c_ + m) * 255),
+    x = Math.round((x_ + m) * 255),
+    z = Math.round(m * 255)
+  switch (Math.floor(h / 60)) {
+    case 0:
+      return make_color_rgb(c, x, z)
+    case 1:
+      return make_color_rgb(x, c, z)
+    case 2:
+      return make_color_rgb(z, c, x)
+    case 3:
+      return make_color_rgb(z, x, c)
+    case 4:
+      return make_color_rgb(x, z, c)
+    case 5:
+      return make_color_rgb(c, z, x)
+  }
+}
+
+function merge_color(col1, col2, amount) {
+  return make_color_rgb(
+    Math.round((col1 >> 16) * amount + (col2 >> 16) * (1 - amount)),
+    Math.round(((col1 >> 8) & 0xff) * amount + ((col2 >> 8) & 0xff) * (1 - amount)),
+    Math.round((col1 & 0xff) * amount + (col2 & 0xff) * (1 - amount))
+  )
 }
 
 const VAligns = window.VAligns = {
@@ -734,11 +813,9 @@ function room_goto(id, restart=false) {
   room = id
   newRoom.create(restart)
   for (const instance of __gml_global_variables) {
-    instance.__room = id
     instance.roomstart()
   }
   for (const instance of __gml_room_variables) {
-    instance.__room = id
     instance.roomstart()
   }
   __gml_activate(mouse_x, mouse_y, true)
@@ -766,7 +843,11 @@ class GMLObject {
     if (self.alarm === undefined) { self.alarm = [] }
     __gml_physics_collection.add(self)
   }
-  destroy() {}
+  
+  destroy() {
+    const self = this
+    __gml_physics_collection.remove(self)
+  }
   
   draw() {
     const self = this
@@ -1131,7 +1212,7 @@ function drawit() {
   const end = performance.now()
   const newfps = 1000 / Math.max(0.01, end - start)
   fps_real = 0.9 * fps_real + 0.1 * newfps
-  __gml_draw_handle = setTimeout(drawit, Math.max(0, end - start - 1000 / __gml_current_room.room_speed))
+  __gml_draw_handle = setTimeout(drawit, Math.max(0, 1000 / __gml_current_room.room_speed - (end - start)))
 }
 
 function dewit(room) {

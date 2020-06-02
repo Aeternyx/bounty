@@ -152,17 +152,20 @@ class Encounter extends GMLObject {
       }
       self.text += i
       accept = true
+    } else if (roll_d6(obj_stats.negotiate + self.neg_mod, "Negotiation") > 5) {
+      obj_stats.negotiate_used = self.type
+      obj_stats.negotiate_inside = inside
+      obj_stats.encounters += 1
+      room_restart()
+      return
     } else {
-      if (roll_d6(obj_stats.negotiate + self.neg_mod, "Negotiation") > 5) {
-        i = ""
-        if (obj_stats.negotiate_used === 0) {
-          i = "##You declined."
-        } else if (obj_stats.negotiate_used < 0) {
-          i = "##You weren't able to work something out in the end."
-        }
-        self.text += i
-        accept = false
+      if (obj_stats.negotiate_used === 0) {
+        i = "##You declined."
+      } else if (obj_stats.negotiate_used > 0) {
+        i = "##You weren't able to work something out in the end."
       }
+      self.text += i
+      accept = false
     }
     obj_stats.negotiate_used = 0
     if (accept) {
@@ -246,6 +249,7 @@ class Encounter extends GMLObject {
           inside = true
           i = roll_d6(0, "Rape action")
           self.type = get_request(i)
+          if (self.type === SkillTypes.gangbang) { self.type = SkillTypes.oral }
         } else if (self.combat_you === 0) {
           self.success = 2
           self.damage = roll_d6(0, "Damage")
@@ -255,6 +259,7 @@ class Encounter extends GMLObject {
           inside = true
           i = roll_d6(0, "Rape action")
           self.type = get_request(i)
+          if (self.type === SkillTypes.gangbang) { self.type = SkillTypes.oral }
         }
         ii = get_text_danger(self.danger, self.success)
         self.text += ii // string_insert(ii, self.text, string_length(self.text))

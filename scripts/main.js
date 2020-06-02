@@ -893,11 +893,11 @@ function draw_cash(x, text, bal, valign_ig, halign_ig) {
 function draw_stats(x, y, base, current) {
   draw_text(x, y, string(base))
   if (current > base) {
-    draw_set_color(Colors.c_white)
+    draw_set_color(Colors.c_aqua)
   } else if (current === base) {
-    draw_set_color(0xc0c0c0)
+    draw_set_color(Colors.c_silver)
   } else if (current < base) {
-    draw_set_color(Colors.c_light_gray)
+    draw_set_color(make_color_rgb(255, 50, 50))
   }
   draw_text(x + 25, y, "(" + string(current) + ")")
   draw_set_color(Colors.c_white)
@@ -1108,23 +1108,19 @@ function location_store_button(type, name, cost) {
     self.b1_type = type
     self.b1_name = name
     self.b1_cost = cost
-  }
-  if (self.b2_type === 0) {
+  } else if (self.b2_type === 0) {
     self.b2_type = type
     self.b2_name = name
     self.b2_cost = cost
-  }
-  if (self.b3_type === 0) {
+  } else if (self.b3_type === 0) {
     self.b3_type = type
     self.b3_name = name
     self.b3_cost = cost
-  }
-  if (self.b4_type === 0) {
+  } else if (self.b4_type === 0) {
     self.b4_type = type
     self.b4_name = name
     self.b4_cost = cost
-  }
-  if (self.b5_type === 0) {
+  } else if (self.b5_type === 0) {
     self.b5_type = type
     self.b5_name = name
     self.b5_cost = cost
@@ -1136,7 +1132,7 @@ function location_store_create() {
   let i = 0
   self.inst = null
   self.level = 1
-  self.obj = 39 // TODO: what do 39 mean
+  self.obj = obj_store_button
   if (self.b1_type > 0) {
     button_create.call(self, self.x, self.yy)
     self.inst.type = self.b1_type
