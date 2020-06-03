@@ -58,6 +58,13 @@ class Stats extends GMLObject {
     self.negotiate = 0
     self.negotiate_used = 0
     self.negotiate_inside = 0
+    // NOTE: gangbang
+    self.negotiate_v = false
+    self.negotiate_inside_v = false
+    self.negotiate_a = false
+    self.negotiate_inside_a = false
+    self.negotiate_o = false
+    self.negotiate_inside_o = false
     self.weapon_type = 0
     self.weapon_name = "None"
     self.weapon_class = "Unarmed"

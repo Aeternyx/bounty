@@ -1006,9 +1006,6 @@ function get_race(race, subrace) {
 
 function get_request(num) {
   i = SkillTypes.none
-  if (advantage_exist(Advantages.gangbang_slut)) {
-    num += 1
-  }
   // NOTE: used to be vvaooh; now vvaohgg
   switch (num) {
     case 1:
@@ -1019,15 +1016,20 @@ function get_request(num) {
       i = SkillTypes.anal
       break
     case 4:
+    case 5:
       i = SkillTypes.oral
       break
-    case 5:
+    case 6:
       i = SkillTypes.hands
       break
-    case 6:
-    case 7:
-      i = SkillTypes.gangbang
-      break
+  }
+  // NOTE: gangbang
+  let threshold = -2 // 2
+  if (advantage_exist(Advantages.gangbang_slut)) {
+    threshold += 1
+  }
+  if (roll_d6(0, "Gangbang chance", 2) <= threshold) {
+    i = SkillTypes.gangbang
   }
   if (advantage_exist(Advantages.perfect_ass)) {
     switch (i) {

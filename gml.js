@@ -333,8 +333,7 @@ function instance_change(type, call_events=false) {
     this.destroy()
   }
   this.constructor = type.constructor
-  // TODO: is this right
-  Object.setPrototypeOf(this, this.constructor.prototype)
+  Object.setPrototypeOf(this, type.constructor.prototype)
   if (call_events) {
     this.create()
   }
@@ -1079,10 +1078,11 @@ class GMLRoom {
 }
 
 function __gml_proto_proxy(proto) {
-  const clazz = proto.constructor
+  let clazz = proto.constructor
   return new Proxy(proto, {
     get: function(obj, prop) {
       if (prop === 'instances') { return clazz.instances }
+      if (prop === 'constructor') { return clazz }
       let obj2 = __gml_global_variables.find(obj3 => obj3 instanceof clazz)
       if (obj2 === undefined) {
         obj2 = __gml_room_variables.find(obj3 => obj3 instanceof clazz)
@@ -1094,7 +1094,8 @@ function __gml_proto_proxy(proto) {
       return typeof result === 'function' ? result.bind(obj2) : result
     },
     set: function(obj, prop, val) {
-      if (prop === 'instances') { return clazz.instances }
+      if (prop === 'instances') { obj.instances = val; return true }
+      if (prop === 'constructor') { obj.constructor = clazz = val; return true }
       let obj2 = __gml_global_variables.find(obj3 => obj3 instanceof clazz)
       if (obj2 === undefined) {
         obj2 = __gml_room_variables.find(obj3 => obj3 instanceof clazz)

@@ -310,19 +310,7 @@ function get_text_bounty() {
 }
 
 function get_text_customer() {
-  let self = this // NOTE: again, it's obj_stats 
-  let roll = irandom_range(1, 3), i = ""
-  switch (roll) {
-    case 1:
-      i = "You're approached by "
-      break
-    case 2:
-      i = "You have found "
-      break
-    case 3:
-      i = "You're solicited by "
-      break
-  }
+  const self = this
   let ii = i
   i = ""
   let i_race = Races.none

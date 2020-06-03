@@ -39,12 +39,23 @@ class Encounter extends GMLObject {
     }
     let i = roll_d6(0, "Request type")
     self.type = get_request(i)
-    if (self.type === SkillTypes.gangbang) {
-      self.type = SkillTypes.oral
-      // do_gangbang_encounter.call(self)
-      // return
+    if (self.types === SkillTypes.gangbang) {
+      do_gangbang_encounter.call(self)
+      return
     }
-    self.text = get_text_customer()
+    let roll = irandom_range(1, 3), approach = ""
+    switch (roll) {
+      case 1:
+        approach = "You're approached by "
+        break
+      case 2:
+        approach = "You have found "
+        break
+      case 3:
+        approach = "You're solicited by "
+        break
+    }
+    self.text = approach + get_text_customer() + ". "
     let ii = 0
     switch (self.type) {
       case SkillTypes.vaginal:
@@ -117,7 +128,7 @@ class Encounter extends GMLObject {
     self.neg_mod += 1
     self.neg_mod += check_allure()
     let accept = false
-    if (i >= 3) {
+    if (i >= 3) { // NOTE: if setting is inside
       if (obj_stats.mood > 0) {
         i = "##You agree to a price, and "
       } else {
@@ -209,6 +220,7 @@ class Encounter extends GMLObject {
             inside = true
             break
           }
+          break
         case 10:
           if (self.type === SkillTypes.hands) {
             break
@@ -224,6 +236,17 @@ class Encounter extends GMLObject {
         case 15:
           self.danger = Dangers.rape
           break
+      }
+      // NOTE: orc
+      // TODO: check if it works
+      if (self.danger === Dangers.none && get_race(Races.elf) && self.location_race === Races.orc) {
+        i = roll_d6(0, "Danger from orcs")
+        if (i >= 6) {
+          self.danger = Dangers.rough
+        } else if (i >= 4) {
+          self.danger = Dangers.inside
+          inside = true
+        }
       }
       if (!inside && self.danger === 0) {
         if (advantage_exist("Cum In Me!")) {
@@ -249,7 +272,6 @@ class Encounter extends GMLObject {
           inside = true
           i = roll_d6(0, "Rape action")
           self.type = get_request(i)
-          if (self.type === SkillTypes.gangbang) { self.type = SkillTypes.oral }
         } else if (self.combat_you === 0) {
           self.success = 2
           self.damage = roll_d6(0, "Damage")
@@ -259,10 +281,9 @@ class Encounter extends GMLObject {
           inside = true
           i = roll_d6(0, "Rape action")
           self.type = get_request(i)
-          if (self.type === SkillTypes.gangbang) { self.type = SkillTypes.oral }
         }
         ii = get_text_danger(self.danger, self.success)
-        self.text += ii // string_insert(ii, self.text, string_length(self.text))
+        self.text += ii
       }
       switch (self.type) {
         case SkillTypes.vaginal:
@@ -283,11 +304,11 @@ class Encounter extends GMLObject {
           break
       }
       self.text += ii
-      if (self.danger === Dangers.inside && self.type !== 4) {
+      if (self.danger === Dangers.inside && self.type !== SkillTypes.hands) {
         ii = get_text_danger(self.danger, self.success)
         self.text += ii
         self.mood += roll_d6(0, "Internal stress")
-      } else if (self.danger === Dangers.rough && self.type !== 4) {
+      } else if (self.danger === Dangers.rough && self.type !== SkillTypes.hands) {
         ii = get_text_danger(self.danger, self.success)
         self.text += ii
         if (advantage_exist(Advantages.stretchy_body)) {
