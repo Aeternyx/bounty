@@ -6,7 +6,6 @@
 
 class AdvMainCreation extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.inst = null
     if (obj_stats.advantages[0] === Advantages.none) {

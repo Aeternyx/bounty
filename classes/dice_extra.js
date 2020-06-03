@@ -2,7 +2,6 @@
 
 class DiceExtra extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
   

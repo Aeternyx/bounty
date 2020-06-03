@@ -6,7 +6,6 @@
 
 class Main extends GMLObject {
   create() {
-    super.create()
     let self = this
     let i = ""
     if (obj_stats.bounty_distance > 7) {

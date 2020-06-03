@@ -261,33 +261,34 @@ const __baseproto = Object.getPrototypeOf(class{})
 
 function instance_create(x, y, proto, room_start=false) {
   let clazz = proto.constructor
-  let result = new clazz()
+  let instance = new clazz()
   // TODO: i hope hoisting works
   // TODO: lmao so hacky
   while (clazz !== __baseproto) {
     if (!clazz.hasOwnProperty('instances')) {
       clazz.instances = []
     }
-    clazz.instances.push(result)
+    clazz.instances.push(instance)
     clazz = Object.getPrototypeOf(clazz)
   }
-  if (!result.hasOwnProperty('instances')) {
-    result.instances = result.constructor.instances
+  if (!instance.hasOwnProperty('instances')) {
+    instance.instances = instance.constructor.instances
   }
-  result.xstart = result.x = x
-  result.ystart = result.y = y
-  if (result.__global) {
-    __gml_global_variables.push(result)
+  instance.xstart = instance.x = x
+  instance.ystart = instance.y = y
+  if (instance.__global) {
+    __gml_global_variables.push(instance)
   } else {
-    __gml_room_variables.push(result)
+    __gml_room_variables.push(instance)
   }
   if (!room_start) {
-    result.create()
+    instance.create()
   }
+  __gml_physics_collection.add(instance)
   if (__gml_is_stepping) {
-    __gml_to_step.push(result)
+    __gml_to_step.push(instance)
   }
-  return result
+  return instance
 }
 
 function instance_number(obj) {
@@ -302,6 +303,7 @@ function instance_destroy(instance=null) {
     instance = this
   }
   instance.destroy()
+  __gml_physics_collection.remove(instance)
   let clazz = instance.constructor
   while (clazz !== __baseproto) {
     let instances = clazz.instances
@@ -837,16 +839,8 @@ function game_restart() {
 }
 
 class GMLObject {
-  create() {
-    const self = this
-    if (self.alarm === undefined) { self.alarm = [] }
-    __gml_physics_collection.add(self)
-  }
-  
-  destroy() {
-    const self = this
-    __gml_physics_collection.remove(self)
-  }
+  create() {}
+  destroy() {}
   
   draw() {
     const self = this
@@ -861,6 +855,17 @@ class GMLObject {
   
   roomstart() {}
   roomend() {}
+  
+  get alarm() {
+    if (this.__alarm === null) {
+      this.__alarm = []
+    }
+    return this.__alarm
+  }
+  
+  set alarm(val) {
+    this.__alarm = val
+  }
 }
 
 GMLObject.prototype.persistent = false
@@ -870,6 +875,7 @@ GMLObject.prototype.y = GMLObject.prototype.ystart = GMLObject.prototype.yprevio
 GMLObject.prototype.sprite_index = 0
 GMLObject.prototype.image_index = 0
 GMLObject.prototype.image_alpha = 1 // TODO: shit like this
+GMLObject.prototype.__alarm = null
 
 const all = GMLObject
 

@@ -4,7 +4,6 @@
 
 class StatusMask extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.number = 0
     self.active = false
@@ -12,7 +11,6 @@ class StatusMask extends GMLObject {
   }
   
   step() {
-    super.step()
     let self = this
     if (!obj_stats.debug) {
       self.image_index = 0
@@ -22,13 +20,11 @@ class StatusMask extends GMLObject {
   }
   
   mouseenter() {
-    super.mouseenter()
     let self = this
     self.active = true
   }
   
   mouseleave() {
-    super.mouseleave()
     let self = this
     self.active = false
   }

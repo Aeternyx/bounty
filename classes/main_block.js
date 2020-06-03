@@ -2,7 +2,6 @@
 
 class MainBlock extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
 }

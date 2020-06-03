@@ -6,7 +6,6 @@
 
 class Travel extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.food = 0
     self.hygiene = 0

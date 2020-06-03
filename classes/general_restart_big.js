@@ -6,7 +6,6 @@
 
 class GeneralRestartBig extends ButtonBase {
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     if (obj_stats.last_room !== Rooms.rm_main) {

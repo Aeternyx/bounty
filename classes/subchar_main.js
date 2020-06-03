@@ -6,7 +6,6 @@
 
 class SubcharMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = null
     self.obj = obj_subchar_button

@@ -6,14 +6,12 @@
 
 class AdvReader extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.text = ""
     self.advantage = Advantages.none
   }
   
   step() {
-    super.step()
     let self = this
     if (instance_exists(obj_adv_button)) {
       obj_adv_button.instances.forEach(self => {

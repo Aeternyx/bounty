@@ -6,7 +6,6 @@
 
 class StatusAff extends ButtonBase {
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     self.text = "Afflictions"

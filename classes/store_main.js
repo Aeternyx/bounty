@@ -6,7 +6,6 @@
 
 class StoreMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = null
     self.level = obj_stats.stage_tier

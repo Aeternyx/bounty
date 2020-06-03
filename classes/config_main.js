@@ -6,7 +6,6 @@
 
 class ConfigMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     let i = self.x + 220
     let ii = 0

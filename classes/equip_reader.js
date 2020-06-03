@@ -4,7 +4,6 @@
 
 class EquipReader extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.text = ""
     self.level = 0
@@ -12,7 +11,6 @@ class EquipReader extends GMLObject {
   }
   
   step() {
-    super.step()
     let self = this
     obj_store_button.instances.forEach(self => {
       if (self.active) {

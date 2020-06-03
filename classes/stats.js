@@ -6,7 +6,6 @@
 
 class Stats extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.debug = false
     self.fpsreal = fps_real
@@ -575,7 +574,6 @@ class Stats extends GMLObject {
   }
   
   alarm0() {
-    super.alarm0()
     const self = this
     self.fpsreal = fps_real
     self.alarm[0] = 30
@@ -583,7 +581,6 @@ class Stats extends GMLObject {
   
   // a
   keypress65() {
-    super.keypress65()
     const self = this
     if (self.debug) {
       self.actions = 1
@@ -595,7 +592,6 @@ class Stats extends GMLObject {
   
   // c
   keypress67() {
-    super.keypress67()
     const self = this
     if (self.debug) {
       self.cash += 100
@@ -604,7 +600,6 @@ class Stats extends GMLObject {
   
   // f
   keypress70() {
-    super.keypress70()
     const self = this
     if (self.debug) {
       add_fame(1)
@@ -613,7 +608,6 @@ class Stats extends GMLObject {
   
   // h
   keypress72() {
-    super.keypress72()
     const self = this
     if (self.debug) {
       self.hygiene += 10
@@ -622,7 +616,6 @@ class Stats extends GMLObject {
   
   // l
   keypress76() {
-    super.keypress76()
     const self = this
     if (self.debug) {
       self.life += 10
@@ -631,7 +624,6 @@ class Stats extends GMLObject {
   
   // m
   keypress77() {
-    super.keypress77()
     const self = this
     if (self.debug) {
       self.mood += 10
@@ -640,7 +632,6 @@ class Stats extends GMLObject {
   
   // p
   keypress80() {
-    super.keypress80()
     const self = this
     if (self.debug) {
       advantage_add(Advantages.free)
@@ -649,7 +640,6 @@ class Stats extends GMLObject {
   
   // f9
   keypress120() {
-    super.keypress120()
     const self = this
     if (self.debug) {
       self.debug = false
@@ -664,7 +654,6 @@ class Stats extends GMLObject {
   }
   
   roomstart() {
-    super.roomstart()
     const self = this
     if (self.life <= 0) {
       self.gameover = "Raped"
@@ -694,7 +683,6 @@ class Stats extends GMLObject {
   }
   
   roomend() {
-    super.roomend()
     const self = this
     self.last_room = room
   }

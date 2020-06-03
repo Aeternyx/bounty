@@ -6,7 +6,6 @@
 
 class Bounty extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.gameover = 0
     self.hygiene = 0

@@ -6,7 +6,6 @@
 
 class ButtonBase extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.active = 0
     self.number = 0
@@ -80,7 +79,6 @@ class ButtonBase extends GMLObject {
   
   // step1
   beginstep() {
-    super.beginstep()
     const self = this
     self.b_width = sprite_get_width(self.sprite_index)
     self.b_height = sprite_get_height(self.sprite_index)
@@ -88,7 +86,6 @@ class ButtonBase extends GMLObject {
   
   // mouse10
   mouseenter() {
-    super.mouseenter()
     const self = this
     self.active = true
   }
@@ -96,14 +93,12 @@ class ButtonBase extends GMLObject {
   // TODO: remember to trigger mouseleave on window inactive. enter on re-active if needed
   // mouse11
   mouseleave() {
-    super.mouseleave()
     const self = this
     self.active = false
   }
   
   // ctrl
   keypress17() {
-    super.keypress17()
     const self = this
     if (self.sprite_index === Sprites.spr_button_round) {
       self.__override_button = MouseButtons.left

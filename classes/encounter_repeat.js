@@ -6,7 +6,6 @@
 
 class EncounterRepeat extends ButtonBase {
   step() {
-    super.step()
     const self = this
     button_click.call(self)
     self.text = "Next Encounter"

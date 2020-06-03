@@ -2,7 +2,6 @@
 
 class EquipBlock extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
 }

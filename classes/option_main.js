@@ -6,7 +6,6 @@
 
 class OptionMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = 0
     self.obj = obj_option_button

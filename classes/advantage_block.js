@@ -2,7 +2,6 @@
 
 class AdvantageBlock extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
 }

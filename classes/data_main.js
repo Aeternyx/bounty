@@ -7,7 +7,6 @@
 
 class DataMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = null
     self.obj = obj_data_save

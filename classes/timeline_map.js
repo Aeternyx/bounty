@@ -4,13 +4,11 @@
 
 class TimelineMap extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.image_speed = 0
   }
   
   step() {
-    super.step()
     let self = this
     self.image_index = obj_stats.timeline - 1
   }

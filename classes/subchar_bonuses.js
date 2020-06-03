@@ -6,7 +6,6 @@
 
 class SubcharBonuses extends GMLObject {
   create() {
-    super.create()
     let self = this
     let i = 3
     if (get_race(Races.halfling, Subraces[Races.halfling].fae)) {

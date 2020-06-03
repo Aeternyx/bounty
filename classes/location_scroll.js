@@ -7,7 +7,6 @@
 
 class LocationScroll extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.active = false
     self.pressed = 0
@@ -27,20 +26,17 @@ class LocationScroll extends GMLObject {
   
   // mouse_10
   mouseenter() {
-    super.mouseenter()
     const self = this
     self.active = true
   }
   
   // mouse_11
   mouseleave() {
-    super.mouseleave()
     const self = this
     self.active = false
   }
   
   step() {
-    super.step()
     const self = this
     button_click.call(self)
     if (self.pressed === MouseButtons.pressed) {

@@ -6,7 +6,6 @@
 
 class Dice extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.image_speed = 0
     self.active = false
@@ -21,7 +20,6 @@ class Dice extends GMLObject {
   }
   
   step() {
-    super.step()
     const self = this
     switch (obj_stats.dice_type) {
       case 1: self.sprite_index = Sprites.spr_dice; break
@@ -52,14 +50,12 @@ class Dice extends GMLObject {
   
   // mouse10
   mouseenter() {
-    super.mouseenter()
     const self = this
     self.active = true
   }
   
   // mouse11
   mouseleave() {
-    super.mouseleave()
     const self = this
     self.active = false
   }

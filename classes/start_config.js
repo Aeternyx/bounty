@@ -6,7 +6,6 @@
 
 class StartConfig extends ButtonBase {
   step() {
-    super.step()
     const self = this
     button_click.call(self)
     let i = 0

@@ -4,7 +4,6 @@
 
 class Intro extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.x -= 10
     self.spacing = 13

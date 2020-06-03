@@ -4,7 +4,6 @@
 
 class TitleLogo extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.x = 320
     self.image_alpha = 0
@@ -27,7 +26,6 @@ class TitleLogo extends GMLObject {
   }
   
   step() {
-    super.step()
     let self = this
     if (self.image_alpha < 1) {
       self.image_alpha += 0.01

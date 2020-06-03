@@ -6,7 +6,6 @@
 
 class DayBegin extends GMLObject {
   create() {
-    super.create()
     let self = this
     let i = ""
     let eat = 0 // TODO: bool?

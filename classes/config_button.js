@@ -6,7 +6,6 @@
 
 class ConfigButton extends ButtonBase {
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     let i = 0

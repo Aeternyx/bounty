@@ -6,7 +6,6 @@
 
 class ItemDrop extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.item = 0 // TODO: null?
     self.active = false
@@ -20,20 +19,17 @@ class ItemDrop extends GMLObject {
   
   // mouse_10
   mouseenter() {
-    super.mouseenter()
     let self = this
     self.active = true
   }
   
   // mouse_11
   mouseleave() {
-    super.mouseleave()
     let self = this
     self.active = false
   }
   
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     if (self.pressed === MouseButtons.left) {

@@ -2,7 +2,6 @@
 
 class CharacterBlock extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
 }

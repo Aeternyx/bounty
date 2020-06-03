@@ -6,7 +6,6 @@
 
 class AdvMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = null
     self.obj = obj_adv_button

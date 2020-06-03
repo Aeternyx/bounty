@@ -6,7 +6,6 @@
 
 class TravelReset extends ButtonBase {
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     self.text = "Reset"

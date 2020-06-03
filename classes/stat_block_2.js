@@ -2,7 +2,6 @@
 
 class StatBlock2 extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
 }

@@ -37,7 +37,6 @@ class MainFood extends ButtonBase {
   }
   
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     self.text = "Food"

@@ -6,7 +6,6 @@
 
 class MainLocMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = null
     self.obj = obj_main_loc_button

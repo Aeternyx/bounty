@@ -33,7 +33,6 @@ class OptionButton extends ButtonBase {
   }
   
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     if (self.pressed === MouseButtons.left || self.pressed === MouseButtons.right) {

@@ -6,7 +6,6 @@
 
 class LocationButton extends ButtonBase {
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     if (self.price > obj_stats.cash) {

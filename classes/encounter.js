@@ -8,7 +8,6 @@
 /* globals get_text_danger, get_text_encounter_v, get_text_encounter_a, get_text_encounter_o, get_text_encounter_h */
 class Encounter extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.type = 0
     let mood_cap = 100

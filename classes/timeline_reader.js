@@ -6,7 +6,6 @@
 
 class TimelineReader extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.text = ""
     self.level = 0
@@ -29,7 +28,6 @@ class TimelineReader extends GMLObject {
   }
   
   step() {
-    super.step()
     let self = this
     obj_timeline_button.instances.forEach(step => {
       if (self.active) {

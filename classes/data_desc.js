@@ -6,7 +6,6 @@
 
 class DataDesc extends GMLObject {
   create() {
-    super.create()
     const self = this
     self.data = 0
     self.alarm[0] = 1
@@ -48,7 +47,6 @@ class DataDesc extends GMLObject {
   }
   
   alarm0() {
-    super.alarm0()
     const self = this
     let slot = "DATA" + string(self.data)
     ini_open("data.ini")

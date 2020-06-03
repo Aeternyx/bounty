@@ -6,7 +6,6 @@
 
 class DebugMain extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.inst = 0
     self.obj = obj_debug_button

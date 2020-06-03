@@ -6,7 +6,6 @@
 
 class MainStore extends ButtonBase {
   step() {
-    super.step()
     let self = this
     button_click.call(self)
     if (obj_stats.location === Rooms.rm_options) {

@@ -2,7 +2,6 @@
 
 class SkillBlock extends GMLObject {
   create() {
-    super.create()
     let self = this
   }
 }

@@ -6,7 +6,6 @@
 
 class RaceReader extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.text = ""
     self.advantage = Advantages.none
@@ -28,7 +27,6 @@ class RaceReader extends GMLObject {
   }
   
   step() {
-    super.step()
     const self = this
     if (instance_exists(obj_char_button)) {
       obj_char_button.instances.forEach(self => {

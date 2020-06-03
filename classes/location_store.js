@@ -6,7 +6,6 @@
 
 class LocationStore extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.b1_type = 0
     self.b1_name = null

@@ -6,7 +6,6 @@
 
 class OptionsReader extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.text = ""
     self.level = 0
@@ -29,7 +28,6 @@ class OptionsReader extends GMLObject {
   }
   
   step() {
-    super.step()
     let self = this
     obj_option_button.instances.forEach(self => {
       if (self.active) {

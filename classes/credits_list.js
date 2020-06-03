@@ -4,7 +4,6 @@
 
 class CreditsList extends GMLObject {
   create() {
-    super.create()
     let self = this
     self.text = "Credits#"
     self.text += "#Developer#Captain of the Guard"
