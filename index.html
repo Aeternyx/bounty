@@ -3,7 +3,7 @@
     <title>Bounty</title>
     <!-- <link rel="icon" href="https://cdn.glitch.com/aa7ba2ce-98dc-4149-8f6a-37c5b8bdfb42%2Ffavicon.ico?v=1589966180029"> -->
     <link rel="icon" href="favicon.ico">
-    <style>body { background: #080808; }</style>
+    <style>html, body { height: 100%; } body { background: #080808; margin: 0; }</style>
     <!-- o boy -->
     <script>
     window.info = { name: 'Bounty' }
@@ -146,6 +146,10 @@
     <script src="start.js" defer></script>
   </head>
   <body>
-    <canvas id="gml_screen" width="640" height="480" tabindex="0"></canvas>
+    <div style="display: flex; flex-flow: column nowrap; height: 100%">
+      <div style="flex: 1 0 auto"></div>
+      <center style="flex: 0 1 auto"><canvas id="gml_screen" width="640" height="480" tabindex="0"></canvas></center>
+      <div style="flex: 1 0 auto"></div>
+    </div>
   </body>
 </html>

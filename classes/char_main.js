@@ -11,8 +11,7 @@ class CharMain extends GMLObject {
     self.obj = obj_char_button
     self.yy = self.y
     button_create.call(self, self.x, self.yy)
-    // TODO: inst is 0 rn...
-    self.inst.number = Races.human // NOTE: supposed to be pointer but eh
+    self.inst.number = Races.human
     self.inst.text = Races.human
     button_create.call(self, self.x, self.yy)
     self.inst.number = Races.half_elf
@@ -41,7 +40,7 @@ class CharMain extends GMLObject {
     button_create.call(self, self.x, self.yy)
     self.inst.number = Races.none
     self.inst.text = Races.none
-    instance_destroy(self)
+    instance_destroy.call(self)
   }
 }
 

@@ -6,7 +6,7 @@
 
 class ConfigButton extends ButtonBase {
   step() {
-    let self = this
+    const self = this
     button_click.call(self)
     let i = 0
     if (self.pressed === MouseButtons.left || self.pressed === MouseButtons.right) {
@@ -30,6 +30,16 @@ class ConfigButton extends ButtonBase {
             obj_stats.dice_size = 1
           } else if (obj_stats.dice_size === 0) {
             obj_stats.dice_size = 2
+          }
+          obj_dice.instances.slice().forEach(self => {
+            instance_destroy.call(self)
+          })
+          let x = self.x + 220
+          let y = self.y - 40
+          for (let ii = 0; ii < 6; ii++) {
+            const inst = instance_create(x, y, obj_dice)
+            inst.image_index = ii
+            x += 25 * obj_stats.dice_size
           }
           break
         case "Bar Type":
@@ -57,12 +67,15 @@ class ConfigButton extends ButtonBase {
           }
           break
         case "Scaling":
-          obj_stats.scaling += i
-          if (obj_stats.scaling === 4) {
-            obj_stats.scaling = 1
-          } else if (obj_stats.scaling === 0) {
-            obj_stats.scaling = 3
+          obj_stats.scale_type += i
+          if (obj_stats.scale_type === 4) {
+            obj_stats.scale_type = 1
+          } else if (obj_stats.scale_type === 0) {
+            obj_stats.scale_type = 3
           }
+          // TODO: gml things to do this
+          __gml_scale_mode = obj_stats.scale_type - 1
+          __gml_rescale()
           break
       }
       self.pressed = 0
@@ -106,7 +119,7 @@ class ConfigButton extends ButtonBase {
       case "Scaling":
         // TODO: gotta implement this shit in js. have like a little thing in the bottom right corner of the canvas i guess. and/or window resize
         // probs just window resize for now
-        switch (obj_stats.scaling) {
+        switch (obj_stats.scale_type) {
           case 1: self.text2 = "None"; break
           case 2: self.text2 = "Aspect Ratio"; break
           case 3: self.text2 = "Stretch"; break

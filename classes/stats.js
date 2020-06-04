@@ -159,8 +159,8 @@ class Stats extends GMLObject {
       mask = true
     }
     if (self.screen_outline) {
-      draw_set_color(Colors.c_dark_gray)
-      draw_rectangle(0, 0, 639, 479, 1)
+      draw_set_color(Colors.c_dkgray)
+      draw_rectangle(0, 0, 639, 479, true)
     }
     let i
     if (self.bar_type === 1) {
@@ -685,6 +685,16 @@ class Stats extends GMLObject {
   roomend() {
     const self = this
     self.last_room = room
+  }
+  
+  // other10
+  user0() {
+    hspeed = 0
+  }
+  
+  // other11
+  user1() {
+    vspeed = 0
   }
 }
 

@@ -22,7 +22,6 @@ class FameMain extends GMLObject {
     button_create.call(self, self.x, self.yy)
     self.inst.number = "Free"
     self.inst.text = "Free"
-    // TODO: the free shit not appear
     instance_destroy.call(self)
   }
 }

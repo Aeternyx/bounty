@@ -1,3 +1,13 @@
 - `with (obj)` does not exist in js. use `obj.instances.forEach` instead. `all` is not an exception.
 - `string_replace_all` does inplace string modification. this does not exist in js
 - if a function wants to use `self`, 1. `var self = this`, 2. do `fn.call(self, ...args)` in caller
+- instead of event_inherited simply do `super.<event>`
+- exit   ->   return
+- ^( +)([^.]+) = (.+)$   ->   "$1self.$2 = $3
+- s/^( \+)([^.]\+) = (.\+)$/\1self.\2 = \3/
+- s/^( \+)([a-zA-Z_]\+\[.\+\]) = (.\+)$/\1self.\2 = \3/
+- s/^( \+)([a-zA-Z_]\+)\(\) \{/\1\2 () {\n\1  super.\2()/
+- s/^( \+)(if|else if|switch) ([^()][^)]\+)$/\1\2 (\3)/
+- s/^( \+)instance_destroy\(\)$/\1instance_destroy.call(self)/
+
+- s/^( \+)self\.alarm(\+\[.\+\]) = -1$/\1delete self.alarm\2/

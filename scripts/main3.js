@@ -311,8 +311,8 @@ function get_text_bounty() {
 
 function get_text_customer() {
   const self = this
-  let ii = i
-  i = ""
+  let ii = ""
+  let i = ""
   let i_race = Races.none
   roll = irandom_range(1, 6) // NOTE: same as roll_d6, but i guess out of combat so roll useless here
   switch (obj_stats.location_race) {
@@ -492,7 +492,7 @@ function get_text_customer() {
       }
       break
   }
-  return ii + " " + i + ". "
+  return ii + " " + i
 }
 
 function get_text_danger(danger, attacked_action) {

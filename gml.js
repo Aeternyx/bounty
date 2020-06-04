@@ -2,6 +2,7 @@ const canvas = document.getElementById('gml_screen'),
   ctx = canvas.getContext('2d'),
   tcanvas = new OffscreenCanvas(0, 0),
   tctx = tcanvas.getContext('2d')
+ctx.imageSmoothingEnabled = false
 
 const classes = window.classes = []
 const rooms = window.rooms = []
@@ -19,7 +20,12 @@ let __gml_draw_handle = 0,
   __gml_room_variables = [],
   fps_real = 1,
   __gml_is_stepping = false,
-  __gml_to_step = []
+  __gml_to_step = [],
+  room_speed = 60,
+  __gml_drawgui_used = false,
+  __gml_xscale = 1,
+  __gml_yscale = 1,
+  __gml_scale_mode = 0
 
 // TODO: begin rng, non-gml
 let __gml_prng_c = (function () {
@@ -265,14 +271,8 @@ function instance_create(x, y, proto, room_start=false) {
   // TODO: i hope hoisting works
   // TODO: lmao so hacky
   while (clazz !== __baseproto) {
-    if (!clazz.hasOwnProperty('instances')) {
-      clazz.instances = []
-    }
     clazz.instances.push(instance)
     clazz = Object.getPrototypeOf(clazz)
-  }
-  if (!instance.hasOwnProperty('instances')) {
-    instance.instances = instance.constructor.instances
   }
   instance.xstart = instance.x = x
   instance.ystart = instance.y = y
@@ -284,6 +284,9 @@ function instance_create(x, y, proto, room_start=false) {
   if (!room_start) {
     instance.create()
   }
+  if (!__gml_drawgui_used && instance.drawgui !== noop) {
+    __gml_drawgui_used = true
+  }
   __gml_physics_collection.add(instance)
   if (__gml_is_stepping) {
     __gml_to_step.push(instance)
@@ -292,7 +295,8 @@ function instance_create(x, y, proto, room_start=false) {
 }
 
 function instance_number(obj) {
-  return obj.constructor.instances.length
+  const clazz = obj.constructor
+  return clazz.instances.reduce((p, c) => p + (c.constructor === clazz), 0)
 }
 
 // TODO: __instances
@@ -324,10 +328,7 @@ function instance_destroy(instance=null) {
 }
 
 function instance_exists(obj) {
-  // NOTE: proxy forwards constructor fine
-  const clazz = obj.constructor
-  if (!clazz.hasOwnProperty('instances')) { clazz.instances = [] }
-  return __gml_global_variables.some(obj2 => obj2 instanceof clazz)  || __gml_room_variables.some(obj2 => obj2 instanceof clazz)
+  return __gml_global_variables.some(obj2 => obj2 instanceof obj.constructor)  || __gml_room_variables.some(obj2 => obj2 instanceof obj.constructor)
 }
 
 function instance_change(type, call_events=false) {
@@ -765,19 +766,33 @@ function draw_text_ext_transformed_color(x, y, string, sep, w, xscale, yscale, a
   __gml_draw_config.color = color_
 }
 
-function draw_rectangle(x, y, w, h, idkThisParam) {
-  // TODO
+function draw_rectangle(x, y, x2, y2, outline_only) {
+  ctx.strokeStyle = `#${__gml_draw_config.color.toString(16).padStart(6, '0')}`
+  if (outline_only) {
+    ctx.strokeRect(x, y, x2 - x + 1, y2 - y + 1)
+  } else {
+    ctx.fillStyle = ctx.strokeStyle
+    ctx.fillRect(x, y, x2 -  x + 1, y2 - y + 1)
+  }
 }
 
 function draw_sprite(sprite_index, image_index, x, y, opts) {
   opts = opts || {}
-  const image_alpha = opts.image_alpha === undefined ? 1 : opts.image_alpha
+  const image_alpha = 'image_alpha' in opts ? 1 : opts.image_alpha
   if (image_alpha !== __gml_alpha) {
     ctx.globalAlpha = __gml_alpha = image_alpha
   }
   const sprite = sprites[sprite_index],
     image = textures[sprite.textures[image_index]]
-  ctx.drawImage(__gml_texture_sheets[image.sheetid], image.src.x, image.src.y, image.src.width, image.src.height, x - sprite.origin.x, y - sprite.origin.y, image.dest.width, image.dest.height)
+  if ('image_xscale' in opts || 'image_yscale' in opts) {
+    x /= opts.image_xscale
+    y /= opts.image_yscale
+    ctx.scale(opts.image_xscale, opts.image_yscale)
+    ctx.drawImage(__gml_texture_sheets[image.sheetid], image.src.x, image.src.y, image.src.width, image.src.height, x - sprite.origin.x, y - sprite.origin.y, image.dest.width, image.dest.height)
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+  } else {
+    ctx.drawImage(__gml_texture_sheets[image.sheetid], image.src.x, image.src.y, image.src.width, image.src.height, x - sprite.origin.x, y - sprite.origin.y, image.dest.width, image.dest.height)
+  }
 }
 
 function draw_sprite_ext(sprite_index, image_index, x, y, xscale, yscale, rot, color, alpha) {
@@ -797,6 +812,34 @@ function draw_highscore() {
   // TODO
 }
 
+function __gml_rescale() {
+  const h = window.innerHeight,
+    w = window.innerWidth,
+    room_ = roomdatas[room]
+  switch (__gml_scale_mode) {
+    case 0:
+    default:
+      __gml_xscale = __gml_yscale = 1
+      canvas.style.width = canvas.style.height = null
+      break
+    case 1:
+      __gml_xscale = __gml_yscale = Math.min(w / room_.size.width, h / room_.size.height)
+      canvas.style.width = `${Math.round(room_.size.width * __gml_xscale)}px`
+      canvas.style.height = `${Math.round(room_.size.height * __gml_yscale)}px`
+      break
+    case 2:
+      __gml_xscale = w / room_.size.width
+      __gml_yscale = h / room_.size.height
+      canvas.style.width = `${w}px`
+      canvas.style.height = `${h}px`
+      break
+  }
+}
+
+window.addEventListener('resize', e => {
+  __gml_rescale()
+})
+
 // end draw stuff
 
 function room_goto(id, restart=false) {
@@ -812,6 +855,7 @@ function room_goto(id, restart=false) {
   }
   const newRoom = __gml_current_room = rooms[id]
   room = id
+  room_speed = roomdatas[id].speed
   newRoom.create(restart)
   for (const instance of __gml_global_variables) {
     instance.roomstart()
@@ -847,7 +891,7 @@ class GMLObject {
     if (self.sprite_index === undefined || self.__visible === false) {
       return
     }
-    draw_sprite(self.sprite_index, self.image_index, self.x, self.y, {image_alpha: self.image_alpha})
+    draw_sprite(self.sprite_index, self.image_index, self.x, self.y, self)
   }
   
   mouseenter() {}
@@ -866,12 +910,27 @@ class GMLObject {
   set alarm(val) {
     this.__alarm = val
   }
+  
+  get instances() {
+    if (!this.hasOwnProperty('__instances')) {
+      this.__instances = []
+    }
+    return this.__instances
+  }
+  
+  static get instances() {
+    if (!this.hasOwnProperty('__instances')) {
+      this.__instances = []
+    }
+    return this.__instances
+  }
 }
 
 GMLObject.prototype.persistent = false
 GMLObject.prototype.depth = 0
 GMLObject.prototype.x = GMLObject.prototype.xstart = GMLObject.prototype.xprevious = 0
 GMLObject.prototype.y = GMLObject.prototype.ystart = GMLObject.prototype.yprevious = 0
+GMLObject.prototype.image_xscale = GMLObject.prototype.image_yscale = 1
 GMLObject.prototype.sprite_index = 0
 GMLObject.prototype.image_index = 0
 GMLObject.prototype.image_alpha = 1 // TODO: shit like this
@@ -892,6 +951,7 @@ let noop = function() {}
 GMLObject.prototype.beginstep = noop
 GMLObject.prototype.step = noop
 GMLObject.prototype.endstep = noop
+GMLObject.prototype.drawgui = noop
 
 for (let i = 0; i < 12; i++) {
   GMLObject.prototype['alarm' + i] = noop
@@ -1044,12 +1104,26 @@ class GMLRoom {
     __gml_is_stepping = false
     // TODO: predraw/postdraw
     for (const instance of __gml_global_variables.sort((a, b) => b.depth - a.depth)) {
+      if (instance.draw === noop) { continue }
       instance.draw()
       if (oldRoom !== room) { break }
     }
     for (const instance of __gml_room_variables.sort((a, b) => b.depth - a.depth)) {
+      if (instance.draw === noop) { continue }
       instance.draw()
       if (oldRoom !== room) { break }
+    }
+    if (__gml_drawgui_used) {
+      for (const instance of __gml_global_variables.sort((a, b) => b.depth - a.depth)) {
+        if (instance.drawgui === noop) { continue }
+        instance.drawgui()
+        if (oldRoom !== room) { break }
+      }
+      for (const instance of __gml_room_variables.sort((a, b) => b.depth - a.depth)) {
+        if (instance.drawgui === noop) { continue }
+        instance.drawgui()
+        if (oldRoom !== room) { break }
+      }
     }
     __gml_left_pressed = false
     __gml_middle_pressed = false
@@ -1156,7 +1230,7 @@ canvas.addEventListener('mouseup', e => {
 function __gml_activate(ax, ay, override=false) {
   __gml_physics_collection.forEach(obj => {
     const bx = obj.x, by = obj.y
-    let x = ax - bx + sprites[obj.sprite_index].origin.x, y = ay - by + sprites[obj.sprite_index].origin.y
+    let x = (ax - bx + sprites[obj.sprite_index].origin.x) / obj.image_xscale, y = (ay - by + sprites[obj.sprite_index].origin.y) / obj.image_yscale
     if (x >= 0 && y >= 0 && x < sprites[obj.sprite_index].size.width && y < sprites[obj.sprite_index].size.height && sprites[obj.sprite_index].colmasks.every(mask => mask.data(x, y))) {
       if (override || !obj.__active) {
         obj.__active = true
@@ -1174,7 +1248,7 @@ function __gml_activate(ax, ay, override=false) {
 }
 
 canvas.addEventListener('mousemove', e => {
-  __gml_activate(mouse_x=e.offsetX, mouse_y=e.offsetY)
+  __gml_activate(mouse_x=e.offsetX/__gml_xscale, mouse_y=e.offsetY/__gml_yscale)
 })
 
 function mouse_check_button_pressed(button) {
@@ -1214,11 +1288,12 @@ function drawit() {
   const end = performance.now()
   const newfps = 1000 / Math.max(0.01, end - start)
   fps_real = 0.9 * fps_real + 0.1 * newfps
-  __gml_draw_handle = setTimeout(drawit, Math.max(0, 1000 / roomdatas[room].speed - (end - start)))
+  __gml_draw_handle = setTimeout(drawit, Math.max(0, 1000 / room_speed - (end - start)))
 }
 
 function dewit(room) {
   room_goto(room)
+  __gml_rescale()
   drawit()
 }
 

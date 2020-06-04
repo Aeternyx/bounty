@@ -202,6 +202,7 @@ class Encounter extends GMLObject {
       self.text += ii
       self.safety = (obj_stats.o_safety - 2) * -1
       i = roll_d6(self.safety, "Danger", 2)
+      console.log(self.safety, i, obj_stats.o_safety)
       switch (i) {
         case 7:
           if (!(self.pullout_mod <= 1)) {

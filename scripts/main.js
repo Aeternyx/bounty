@@ -1243,21 +1243,19 @@ function pregnancy() {
 function roll_d6(mod, text, extra_dice) {
   let size = obj_stats.dice_size,
     i = floor(random(6)) + 1 + mod,
-    ii = instance_create(80 + instance_number(obj_dice_extra) * 20 * size + instance_number(obj_dice) * 25 * size, 460, obj_dice)
+    ii = instance_create(80 + instance_number(obj_dice_extra) * 20 * size + instance_number(obj_dice) * 25 * size, 480 - 20 * size, obj_dice)
   ii.image_index = i - 1 - mod
-  if (text != "None") {
+  if (text !== "None") {
     ii.text = text
   }
   let roll = i
   if (arguments.length > 2) {
-    while (extra_dice-- > 0) {
+    for (let j = 1; j < extra_dice; j++) {
       i = floor(random(6)) + 1 + mod
       roll += i
-      instance_create(75 + instance_number(obj_dice_extra) * 20 * size + instance_number(obj_dice) * 25 * size, 460, obj_dice_extra)
+      ii = instance_create(75 + instance_number(obj_dice_extra) * 20 * size + instance_number(obj_dice) * 25 * size, 480 - 20 * size, obj_dice_extra)
       ii.image_index = i - 1 - mod
-      ii.image_xscale = size
-      ii.image_yscale = size
-      if (text != "None") {
+      if (text !== "None") {
         ii.text = text
       }
     }

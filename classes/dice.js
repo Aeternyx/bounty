@@ -17,6 +17,8 @@ class Dice extends GMLObject {
       case 4: self.sprite_index = Sprites.spr_dice_4; break
       case 5: self.sprite_index = Sprites.spr_dice_5; break
     }
+    self.image_xscale = obj_stats.dice_size
+    self.image_yscale = obj_stats.dice_size
   }
   
   step() {
