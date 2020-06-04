@@ -12,7 +12,7 @@ class AdvMainCreation extends GMLObject {
       self.race = obj_stats.race
       if (get_race(Races.elf) || get_race(Races.half_elf)) {
         advantage_add(Advantages.elf) // TODO: is self an existing advantage
-      } else if (get_race(Races.halfling) || get_race(Races.goblin)) {
+      } else if (get_race(Races.halfling) || get_race(Races.goblin) || get_race(Races.dwarf)) {
         advantage_add(Advantages.small)
       } else if (get_race(Races.human)) {
         advantage_add(Advantages.free)
