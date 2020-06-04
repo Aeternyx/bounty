@@ -25,7 +25,12 @@ let __gml_draw_handle = 0,
   __gml_drawgui_used = false,
   __gml_xscale = 1,
   __gml_yscale = 1,
-  __gml_scale_mode = 0
+  __gml_scale_mode = 0,
+  __gml_pixelated = false
+
+if (__gml_pixelated) {
+  canvas.style.imageRendering = 'pixelated'
+}
 
 // TODO: begin rng, non-gml
 let __gml_prng_c = (function () {

@@ -38,6 +38,7 @@ class Stats extends GMLObject {
     self.title_bar = 1
     self.title_text = ""
     load_config.call(self)
+    __gml_scale_mode = self.scale_type - 1
     self.body = 3
     self.mind = 3
     self.charm = 3
