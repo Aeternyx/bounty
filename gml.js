@@ -26,7 +26,8 @@ let __gml_draw_handle = 0,
   __gml_xscale = 1,
   __gml_yscale = 1,
   __gml_scale_mode = 0,
-  __gml_pixelated = false
+  __gml_pixelated = false,
+  keyboard_string = ''
 
 if (__gml_pixelated) {
   canvas.style.imageRendering = 'pixelated'
@@ -183,6 +184,18 @@ function string_length(string) {
 
 function string_replace_all(content, replacee, replacer) {
   return content.split(replacee).join(replacer)
+}
+
+function string_copy(str, index, count) {
+  return str.slice(index - 1, index - 1 + count)
+}
+
+function string_lower(str) {
+  return str.toLowerCase()
+}
+
+function string_upper(str) {
+  return str.toUpperCase()
 }
 
 // end string
@@ -781,7 +794,7 @@ function draw_rectangle(x, y, x2, y2, outline_only) {
   }
 }
 
-function draw_sprite(sprite_index, image_index, x, y, opts) {
+function draw_sprite(sprite_index, image_index, x, y, opts=null) {
   opts = opts || {}
   const image_alpha = 'image_alpha' in opts ? 1 : opts.image_alpha
   if (image_alpha !== __gml_alpha) {
@@ -1197,6 +1210,17 @@ function __gml_proto_proxy(proto) {
 // begin mouse stuff
 
 canvas.addEventListener('keydown', e => {
+  if (e.key.length === 1) {
+    keyboard_string += e.key
+    if (keyboard_string.length > 1024) {
+      keyboard_string = keyboard_string.slice(keyboard_string.length - 1024)
+    }
+  } else if (e.keyCode === 8) {
+    // backspace
+    if (keyboard_string.length > 0) {
+      keyboard_string = keyboard_string.slice(0, keyboard_string.length - 1)
+    }
+  }
   const id = 'keypress' + e.keyCode
   __gml_global_variables.forEach(obj => {
     if (obj[id] !== noop) {

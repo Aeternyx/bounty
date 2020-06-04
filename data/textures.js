@@ -120,4 +120,5 @@ const textures = window.textures = [
 {"src":{"x":666,"y":206,"width":256,"height":128},"dest":{"x":0,"y":0,"width":256,"height":128},"size":{"width":256,"height":128},"sheetid":0},
 {"src":{"x":666,"y":338,"width":256,"height":128},"dest":{"x":0,"y":0,"width":256,"height":128},"size":{"width":256,"height":128},"sheetid":0},
 {"src":{"x":406,"y":206,"width":256,"height":256},"dest":{"x":0,"y":0,"width":256,"height":256},"size":{"width":256,"height":256},"sheetid":0},
+{"src":{"x":16,"y":712,"width":200,"height":20},"dest":{"x":0,"y":0,"width":200,"height":20},"size":{"width":200,"height":20},"sheetid":0},
 ]

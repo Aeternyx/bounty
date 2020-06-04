@@ -57,6 +57,7 @@ const Sprites = window.Sprites = {
   spr_dice_5: 38,
   spr_mask_100x13: 39,
   spr_timeline_map: 40,
+  spr_input_bar: 41,
 }
 
 // TODO: replace all usages of pressed = 1. do a grep idk even
@@ -170,6 +171,13 @@ const Classes = window.Classes = {
   obj_main_debug: 86,
   obj_debug_button: 87,
   obj_debug_main: 88,
+  obj_overview_button: 89,
+  obj_overview_main: 90,
+  obj_overview_finished: 91,
+  obj_name_input: 92,
+  obj_name_block: 93,
+  obj_appearance_reader: 94,
+  obj_status_app: 95,
 }
 
 const Rooms = window.Rooms = {
@@ -204,6 +212,7 @@ const Rooms = window.Rooms = {
   rm_victory_2: 28,
   rm_victory_3: 29,
   rm_debug: 30,
+  rm_appearance: 31,
 }
 
 const Fonts = window.Fonts = {

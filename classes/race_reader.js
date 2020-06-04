@@ -6,7 +6,7 @@
 
 class RaceReader extends GMLObject {
   create() {
-    let self = this
+    const self = this
     self.text = ""
     self.advantage = Advantages.none
   }
@@ -18,7 +18,7 @@ class RaceReader extends GMLObject {
   // align
   /* globals VAligns, HAligns */
   draw() {
-    let self = this
+    const self = this
     draw_set_font(Fonts.f_console)
     draw_set_halign(HAligns.fa_left)
     draw_set_valign(VAligns.fa_top)

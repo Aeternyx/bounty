@@ -11,6 +11,7 @@ class Stats extends GMLObject {
     self.fpsreal = fps_real
     self.data = 0
     self.last_room = room
+    self.name = "Maria" // potentially meaning "rebellion"
     self.race = "Human"
     self.subrace = ""
     self.spec_training = 0
@@ -23,12 +24,13 @@ class Stats extends GMLObject {
     self.sick_a = 0
     self.sick_o = 0
     self.sick_h = 0
-    self.name = ""
-    self.skin = ""
-    self.height = ""
-    self.weight = ""
-    self.hair_c = ""
-    self.hair_l = ""
+    // NOTE: 1. didnt see these 2. i dont see why these need to be string tbh. they literally are just options
+    // self.name = ""
+    // self.skin = ""
+    // self.height = ""
+    // self.weight = ""
+    // self.hair_c = ""
+    // self.hair_l = ""
     self.dice_type = 1
     self.dice_size = 1
     self.bar_type = 1
@@ -126,6 +128,16 @@ class Stats extends GMLObject {
     self.o_safety = 2
     self.o_prostitution = 2
     self.o_self_defense = 2
+    self.a_eye_color = 1
+    self.a_skin_color = 2
+    self.a_height = 2
+    self.a_weight = 2
+    self.a_other = 1
+    self.a_racial = 1
+    self.a_hair_color = 2
+    self.a_hair_length = 4
+    self.a_hair_straightness = 1
+    self.a_hair_style = 3
     self.visits = 1
     self.food = 2
     self.bonus_encounters = 0
@@ -182,6 +194,13 @@ class Stats extends GMLObject {
       draw_set_color(Colors.c_white)
       draw_text(10, 20, self.title_text)
     }
+    if (instance_exists(obj_name_block)) {
+      draw_set_font(Fonts.f_console)
+      draw_set_halign(HAligns.fa_left)
+      draw_set_valign(VAligns.fa_top)
+      draw_set_color(Colors.c_white)
+      draw_text(obj_name_block.x, obj_name_block.y, self.name)
+    }
     if (instance_exists(obj_stat_block)) {
       let xx = obj_stat_block.x
       let yy = obj_stat_block.y
@@ -190,9 +209,9 @@ class Stats extends GMLObject {
       draw_set_valign(VAligns.fa_top)
       draw_set_color(Colors.c_white)
       if (self.subrace === "") {
-        draw_text(xx, yy, string(self.race) + " female")
+        draw_text(xx, yy, self.race + " female")
       } else {
-        draw_text(xx, yy, string(self.subrace) + " " + string(self.race) + " female")
+        draw_text(xx, yy, self.subrace + " " + self.race + " female")
       }
       let i = yy + ii
       stat_color(self.life)
@@ -678,6 +697,7 @@ class Stats extends GMLObject {
       case Rooms.rm_options: i = "Options"; break
       case Rooms.rm_config: i = "Configuration"; break
       case Rooms.rm_debug: i = "Debug"; break
+      case Rooms.rm_appearance: i = "Appearance"; break
       default: i = ""; break
     }
     self.title_text = i

@@ -6,7 +6,7 @@
 
 class DebugButton extends ButtonBase {
   step() {
-    let self = this
+    const self = this
     button_click.call(self)
     if (self.pressed === MouseButtons.left) {
       switch (self.text) {

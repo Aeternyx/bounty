@@ -83,4 +83,6 @@ const sprites = window.sprites = [
 {"size":{"width":100,"height":13},"bounding":{"top":0,"left":0,"bottom":12,"right":99},"bboxmode":1,"sepmasks":false,"origin":{"x":0,"y":0},"textures":[110,111],"colmasks":[{"w":104,"h":13,"data":(x,y)=>x<100}]},
 // spr_timeline_map
 {"size":{"width":400,"height":200},"bounding":{"top":0,"left":0,"bottom":199,"right":399},"bboxmode":0,"sepmasks":false,"origin":{"x":0,"y":0},"textures":[112,113,114],"colmasks":[{"w":400,"h":200,"data":(x,y)=>true}]},
+// spr_input_bar
+{"size":{"width":200,"height":20},"bounding":{"top":0,"left":0,"bottom":19,"right":199},"bboxmode":0,"sepmasks":false,"origin":{"x":0,"y":0},"textures":[118],"colmasks":[{"w":200,"h":20,"data":(x,y)=>true}]},
 ]

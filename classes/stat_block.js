@@ -1,4 +1,5 @@
 // gml
+/* globals GMLObject */
 
 class StatBlock extends GMLObject {
   create() {

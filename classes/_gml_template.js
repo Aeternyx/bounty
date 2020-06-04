@@ -1,8 +1,11 @@
 // gml
+/* globals GMLObject */
+// classes and enums
+/* globals ButtonBase */
 
 class  extends GMLObject {
   create() {
-    let self = this
+    const self = this
   }
   
   // draw
@@ -12,7 +15,7 @@ class  extends GMLObject {
   // align
   /* globals VAligns, HAligns */
   draw() {
-    let self = this
+    const self = this
   }
 }
 
