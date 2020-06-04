@@ -144,7 +144,7 @@ class Location extends GMLObject {
       }
     } else if (advantage_exist(Advantages.willpower) && !advantage_exist(Advantages.unbreakable)) {
       if (self.anal + self.anal_in > 0) {
-        self.mood += roll_d6(0, "Slight anal pain") / 2
+        self.mood -= round(roll_d6(0, "Slight anal pain") / 2)
       }
     }
     if (advantage_exist(Advantages.cum_in_me)) {
@@ -219,7 +219,7 @@ class Location extends GMLObject {
     }
     if (self.cash !== 0) {
       self.cash *= self.cash_multi
-      obj_stats.cash += self.cash
+      obj_stats.cash += round(self.cash)
     }
     if (self.food) {
       obj_stats.food = 5

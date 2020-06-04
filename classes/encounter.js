@@ -202,7 +202,6 @@ class Encounter extends GMLObject {
       self.text += ii
       self.safety = (obj_stats.o_safety - 2) * -1
       i = roll_d6(self.safety, "Danger", 2)
-      console.log(self.safety, i, obj_stats.o_safety)
       switch (i) {
         case 7:
           if (!(self.pullout_mod <= 1)) {
@@ -401,7 +400,7 @@ class Encounter extends GMLObject {
           self.mood += roll_d6(0, "Anal pain")
         } else if (advantage_exist(Advantages.willpower) && !advantage_exist(Advantages.unbreakable)) {
           // NOTE: was just "anal pain"
-          self.mood += roll_d6(0, "Slight anal pain") / 2
+          self.mood += round(roll_d6(0, "Slight anal pain") / 2)
         }
       }
       self.text += get_afflictions(self.type, inside)
