@@ -13,7 +13,7 @@ class StoreButton extends ButtonBase {
     } else {
       self.locked = false
     }
-    if (self.type !== 6 && inventory_exist(self.text, 0)) {
+    if (self.type === 6 && inventory_exist(self.text, 0)) {
       self.locked = true
     }
     if (self.type === 1 && self.pressed === MouseButtons.left && !self.locked) {
