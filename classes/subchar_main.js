@@ -25,7 +25,11 @@ class SubcharMain extends GMLObject {
         break
       case Races.half_elf:
         obj_stats.subrace = ""
-        room_goto_next()
+        if (obj_stats.last_room === Rooms.rm_creation_2) {
+          room_goto_previous()
+        } else {
+          room_goto_next()
+        }
         break
       case Races.elf:
         obj_stats.subrace = Subraces[Races.elf].high

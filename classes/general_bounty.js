@@ -17,4 +17,6 @@ class GeneralBounty extends ButtonBase {
 }
 
 window.classes.push(GeneralBounty)
+/* globals Sprites */
+GeneralBounty.prototype.sprite_index = Sprites.spr_button_round
 window.obj_general_bounty = __gml_proto_proxy(GeneralBounty.prototype)

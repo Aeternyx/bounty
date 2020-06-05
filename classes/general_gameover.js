@@ -17,4 +17,6 @@ class GeneralGameover extends ButtonBase {
 }
 
 window.classes.push(GeneralGameover)
+/* globals Sprites */
+GeneralGameover.prototype.sprite_index = Sprites.spr_button_round
 window.obj_general_gameover = __gml_proto_proxy(GeneralGameover.prototype)

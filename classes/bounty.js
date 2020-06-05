@@ -47,12 +47,12 @@ class Bounty extends GMLObject {
     if (self.mood !== 0) {
       obj_stats.mood -= self.mood
     }
-    if (self.gameover === 1) {
+    if (self.gameover) {
       obj_stats.gameover = "Captured"
+      obj_general_goto_main.instances.forEach(self => {
+        instance_change.call(self, obj_general_gameover, true)
+      })
     }
-    obj_general_goto_main.instances.forEach(self => {
-      instance_change.call(self, obj_general_gameover, true)
-    })
   }
   
   // draw
@@ -63,11 +63,11 @@ class Bounty extends GMLObject {
   /* globals VAligns, HAligns */
   draw() {
     let self = this
-    draw_set_font(Fonts.console)
+    draw_set_font(Fonts.f_console)
     draw_set_halign(HAligns.fa_left)
     draw_set_valign(VAligns.fa_top)
-    draw_set_color(0xFFFFFF)
-    draw_set_ext(self.x, self.y, self.text, 13, 390)
+    draw_set_color(Colors.c_white)
+    draw_text_ext(self.x, self.y, self.text, 13, 390)
   }
 }
 

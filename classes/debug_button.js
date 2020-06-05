@@ -1,4 +1,5 @@
 // gml
+/* globals GMLObject, room_goto */
 // classes and enums
 /* globals ButtonBase, obj_stats, MouseButtons, Rooms */
 // functions and stuff
@@ -17,6 +18,7 @@ class DebugButton extends ButtonBase {
         case "Mood": obj_stats.keypress77(); break
         case "Hygiene": obj_stats.keypress72(); break
         case "Advantages": obj_stats.keypress80(); break
+        case "Appearance": room_goto(Rooms.rm_creation_3); break
       }
       self.pressed = 0
     }

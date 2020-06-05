@@ -1,6 +1,6 @@
 const canvas = document.getElementById('gml_screen'),
   ctx = canvas.getContext('2d'),
-  tcanvas = new OffscreenCanvas(0, 0),
+  tcanvas = 'OffscreenCanvas' in window ? new OffscreenCanvas(0, 0) : document.createElement('canvas'),
   tctx = tcanvas.getContext('2d')
 ctx.imageSmoothingEnabled = false
 
@@ -353,8 +353,10 @@ function instance_change(type, call_events=false) {
   if (call_events) {
     this.destroy()
   }
+  this.constructor.instances.splice(this.constructor.instances.indexOf(this), 1)
   this.constructor = type.constructor
   Object.setPrototypeOf(this, type.constructor.prototype)
+  this.constructor.instances.push(this)
   if (call_events) {
     this.create()
   }
@@ -1157,7 +1159,10 @@ class GMLRoom {
     let instances = [] // NOTE: instance_create adds to current room
     // this is so all instances can be created before any create events are called
     for (const obj of data.objs) {
-      instances.push(instance_create(obj.pos.x, obj.pos.y, classes[Classes[obj.obj]].prototype, true))
+      const proto = classes[Classes[obj.obj]].prototype
+      if (!proto.persistent || instance_number(proto) === 0) {
+        instances.push(instance_create(obj.pos.x, obj.pos.y, proto, true))
+      }
     }
     for (const instance of instances) {
       instance.create()

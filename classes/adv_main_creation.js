@@ -8,7 +8,15 @@ class AdvMainCreation extends GMLObject {
   create() {
     const self = this
     self.inst = null
-    if (obj_stats.advantages[0] === Advantages.none) {
+    if (
+      obj_stats.advantages[0] === Advantages.none ||
+      obj_stats.advantages[0] !== Advantages.small && (get_race(Races.halfling) || get_race(Races.goblin) || get_race(Races.dwarf)) ||
+      obj_stats.advantages[0] === Advantages.small && !(get_race(Races.halfling) || get_race(Races.goblin) || get_race(Races.dwarf)) ||
+      obj_stats.advantages[0] !== Advantages.elf && (get_race(Races.elf) || get_race(Races.half_elf)) ||
+      obj_stats.advantages[0] === Advantages.elf && !(get_race(Races.elf) || get_race(Races.half_elf)) ||
+      obj_stats.advantages[1] !== Advantages.non && !(get_race(Races.human) || get_race(Races.halfling) || get_race(Races.goblin) || get_race(Races.dwarf) || get_race(Races.elf) || get_race(Races.half_elf))
+    ) {
+      obj_stats.advantages[0] = obj_stats.advantages[1] = Advantages.none
       self.race = obj_stats.race
       if (get_race(Races.elf) || get_race(Races.half_elf)) {
         advantage_add(Advantages.elf) // TODO: is self an existing advantage

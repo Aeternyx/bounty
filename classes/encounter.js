@@ -432,7 +432,7 @@ class Encounter extends GMLObject {
       }
       if (self.mood !== 0) {
         self.mood = mood_modify(-self.mood)
-        obj_stats.life = cap_stat(obj_stats.mood, mood_cap, self.mood)
+        obj_stats.mood = cap_stat(obj_stats.mood, mood_cap, self.mood)
       }
       if (self.hygiene !== 0) {
         obj_stats.hygiene = cap_stat(obj_stats.hygiene, hygiene_cap, -self.hygiene)

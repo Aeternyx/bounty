@@ -178,6 +178,7 @@ const Classes = window.Classes = {
   obj_name_block: 93,
   obj_appearance_reader: 94,
   obj_status_app: 95,
+  obj_intro_edit: 96,
 }
 
 const Rooms = window.Rooms = {

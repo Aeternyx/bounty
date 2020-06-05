@@ -177,7 +177,7 @@ function get_text_advantage(advantage) {
 }
 
 function get_text_bounty() {
-  let self = this
+  const self = this
   let roll = roll_d6(0, "Bounty hunter")
   let combat_wep = 0
   switch (obj_stats.weapon_class) {
@@ -198,11 +198,11 @@ function get_text_bounty() {
     success = 1
     self.mood += roll_d6(0, "Mood penalty")
   } else if (self.combat_you !== 0) {
-    self.success = 2
+    success = 2
     self.life = roll_d6(9 + roll, "Damage")
     self.mood += roll_d6(6, "Mood penalty")
   } else if (self.combat_you === 0) {
-    negotiate = roll_d6(obj_stats.negotiate, "Seduction attempt")
+    const negotiate = roll_d6(obj_stats.negotiate, "Seduction attempt")
     if (negotiate > 5) {
       success = 3
     }

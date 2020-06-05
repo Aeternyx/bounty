@@ -31,6 +31,9 @@ class DebugMain extends GMLObject {
     button_create.call(self, self.x, self.yy)
     self.inst.number = "Advantages"
     self.inst.text = "Advantages"
+    button_create.call(self, self.x, self.yy)
+    self.inst.number = "Appearance"
+    self.inst.text = "Appearance"
     instance_destroy.call(self)
   }
 }

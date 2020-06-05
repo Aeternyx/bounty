@@ -43,6 +43,18 @@ class OverviewButton extends ButtonBase {
         self.locked = false
       }
     }
+    if (self.text == "Skin Color") {
+      if (get_race(Races.goblin) || get_race(Races.orc)) {
+        if (get_race(Races.goblin, Subraces[Races.goblin].black)) {
+          obj_stats.a_skin_color = 10
+          self.text2 = "Black"
+        } else {
+          obj_stats.a_skin_color = 9
+          self.text2 = "Green"
+        }
+        self.locked = true
+      }
+    }
     if (self.locked) {
       return
     }
@@ -78,19 +90,10 @@ class OverviewButton extends ButtonBase {
           break
         case "Skin Color":
           obj_stats.a_skin_color += i
-          if (get_race(Races.goblin) || get_race(Races.orc)) {
-            if (get_race(Races.goblin, Subraces[Races.goblin].black)) {
-              obj_stats.a_skin_color = 10
-            } else {
-              obj_stats.a_skin_color = 9
-            }
-            self.locked = true
-          } else {
-            if (obj_stats.a_skin_color === 9) {
-              obj_stats.a_skin_color = 1
-            } else if (obj_stats.a_skin_color === 0) {
-              obj_stats.a_skin_color = 8
-            }
+          if (obj_stats.a_skin_color === 9) {
+            obj_stats.a_skin_color = 1
+          } else if (obj_stats.a_skin_color === 0) {
+            obj_stats.a_skin_color = 8
           }
           break
         case "Height":
