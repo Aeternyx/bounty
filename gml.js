@@ -1,3 +1,5 @@
+// TODO: copy back to bounty
+
 const canvas = document.getElementById('gml_screen'),
   ctx = canvas.getContext('2d'),
   tcanvas = 'OffscreenCanvas' in window ? new OffscreenCanvas(0, 0) : document.createElement('canvas'),
@@ -16,7 +18,7 @@ let __gml_draw_handle = 0,
   mouse_y = 0,
   old_mouse_x = 0,
   old_mouse_y = 0,
-  __gml_global_variables = [],
+  global = { score: 0, health: 0, lives: 0, async_load: -1 },
   __gml_room_variables = [],
   fps_real = 1,
   __gml_is_stepping = false,
@@ -27,10 +29,27 @@ let __gml_draw_handle = 0,
   __gml_yscale = 1,
   __gml_scale_mode = 0,
   __gml_pixelated = false,
-  keyboard_string = ''
+  keyboard_string = '',
+  view_surface_id = Array(8).fill(null),
+  view_current = 0
+
+const noone = null // TODO: this may be handled specially in a `with`. idk
+// TODO: when the fuck do RoomCCs get executed????!?!?!?!?
 
 if (__gml_pixelated) {
   canvas.style.imageRendering = 'pixelated'
+}
+
+function variable_global_exists(key) {
+  return key in global
+}
+
+function variable_global_get(key) {
+  return global[key]
+}
+
+function variable_global_set(key, value) {
+  global[key] = value
 }
 
 // TODO: begin rng, non-gml
@@ -161,14 +180,48 @@ function irandom_range(min, max) {
 // begin math
 
 window.floor = Math.floor
-
 window.ceil = Math.ceil
-
 window.round = Math.round
-
+function frac(n) { return n % 1 }
 window.abs = Math.abs
+window.sin = Math.sin
+window.max = Math.max
+window.min = Math.min
+function mean(...nums) { return nums.reduce((p, c) => p + c, 0) / nums.length }
+function median(...nums) { let arr = nums.sort((a, b) => a - b); let s1 = nums.length >> 1; return nums.length % 2 === 0 ? (nums[s1] + nums[s1 + 1]) / 2 : nums[s1] }
+function clamp(val, min, max) { return val < min ? min : val > max ? max : val }
+function lerp(a, b, amt) { return a * (1 - amt) + b * amt }
+window.arcsin = Math.asin
+window.arccos = Math.acos
+window.arctan = Math.atan
+window.arctan2 = Math.atan2
+window.sin = Math.sin
+window.cos = Math.cos
+window.tan = Math.tan
+function darcsin(val) { return Math.asin(val) / Math.PI * 180 }
+function darccos(val) { return Math.acos(val) / Math.PI * 180 }
+function darctan(val) { return Math.atan(val) / Math.PI * 180 }
+function darctan2(a, b) { return Math.atan2(a, b) / Math.PI * 180 }
+function dsin(val) { return Math.sin(val * Math.PI / 180) }
+function dcos(val) { return Math.cos(val * Math.PI / 180) }
+function dtan(val) { return Math.tan(val * Math.PI / 180) }
+function degtorad(deg) { return deg *  Math.PI / 180 }
+function radtodeg(rad) { return rad / Math.PI * 180 }
+function lengthdir_x(len, dir) { return len * Math.cos(dir) }
+function lengthdir_y(len, dir) { return len * Math.sin(dir) }
+window.ln = Math.log
+window.log2 = Math.log2
+window.log10 = Math.log10
+function logn(n, val) { return Math.log(val) / Math.log(n) }
+window.exp = Math.exp
+window.power = Math.pow
+function sqr(val) { return val * val }
+window.sqrt = Math.sqrt
+function int64(n) { return n | 0 }
 
 // end math
+
+window.show_debug_message = console.log.bind(console)
 
 // begin string
 
@@ -294,11 +347,7 @@ function instance_create(x, y, proto, room_start=false) {
   }
   instance.xstart = instance.x = x
   instance.ystart = instance.y = y
-  if (instance.__global) {
-    __gml_global_variables.push(instance)
-  } else {
-    __gml_room_variables.push(instance)
-  }
+  __gml_room_variables.push(instance)
   if (!room_start) {
     instance.create()
   }
@@ -332,21 +381,14 @@ function instance_destroy(instance=null) {
     instances.splice(instances.indexOf(instance), 1)
     clazz = Object.getPrototypeOf(clazz)
   }
-  if (instance.__global) {
-    const globIndex = __gml_global_variables.indexOf(instance)
-    if (globIndex > -1) {
-      __gml_global_variables.splice(globIndex, 1)
-    }
-  } else {
-    const index = __gml_room_variables.indexOf(instance)
-    if (index > -1) {
-      __gml_room_variables.splice(index, 1)
-    }
+  const index = __gml_room_variables.indexOf(instance)
+  if (index > -1) {
+    __gml_room_variables.splice(index, 1)
   }
 }
 
 function instance_exists(obj) {
-  return __gml_global_variables.some(obj2 => obj2 instanceof obj.constructor)  || __gml_room_variables.some(obj2 => obj2 instanceof obj.constructor)
+  return __gml_room_variables.some(obj2 => obj2 instanceof obj.constructor)
 }
 
 function instance_change(type, call_events=false) {
@@ -364,6 +406,7 @@ function instance_change(type, call_events=false) {
 
 // end obj stuff
 
+// TODO: fix api. need this thing to directly handle collisions
 class PhysicsCollection {
   add(obj) { throw 'not implemented' }
   remove(obj) { throw 'not implemented' } // TODO: fix sig?
@@ -402,6 +445,10 @@ class QuadtreeCollection extends PhysicsCollection {
   remove(x, y, obj) {
     //
   }
+}
+
+function physics_fixture_create() {
+  return {} // TODO: probs need to implement other functions to figure out what we *really* need
 }
 
 for (const sprite of sprites) {
@@ -836,6 +883,8 @@ function __gml_rescale() {
   const h = window.innerHeight,
     w = window.innerWidth,
     room_ = roomdatas[room]
+  canvas.width = room_.size.width
+  canvas.height = room_.size.height
   switch (__gml_scale_mode) {
     case 0:
     default:
@@ -865,9 +914,6 @@ window.addEventListener('resize', e => {
 function room_goto(id, restart=false) {
   const oldRoom = __gml_current_room
   if (oldRoom !== null) {
-    for (const instance of __gml_global_variables) {
-      instance.roomend()
-    }
     for (const instance of __gml_room_variables) {
       instance.roomend()
     }
@@ -877,9 +923,6 @@ function room_goto(id, restart=false) {
   room = id
   room_speed = roomdatas[id].speed
   newRoom.create(restart)
-  for (const instance of __gml_global_variables) {
-    instance.roomstart()
-  }
   for (const instance of __gml_room_variables) {
     instance.roomstart()
   }
@@ -931,11 +974,16 @@ class GMLObject {
     this.__alarm = val
   }
   
+  get id() {
+    return this // NOTE: no pointers in js. pointers be ew. so return this so `with` works properly
+  }
+  
   get instances() {
-    if (!this.hasOwnProperty('__instances')) {
-      this.__instances = []
+    return [this] // TODO: is this right???
+    /*if (!this.hasOwnProperty('__instances')) {
+      this.__instances = [this]
     }
-    return this.__instances
+    return this.__instances*/
   }
   
   static get instances() {
@@ -986,6 +1034,9 @@ for (let i = 0; i < 8; i++) {
 for (let i = 0; i < 16; i++) {
   GMLObject.prototype['user' + i] = noop
 }
+for (let i = 0; i < classes.length; i++) {
+  GMLObject.prototype['collision' + i] = noop
+}
 
 // TODO: trigger alarms only if they are not noop
 
@@ -1002,34 +1053,7 @@ class GMLRoom {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     const oldRoom = room
     __gml_is_stepping = true
-    // TODO: when are alarms supposed to run
-    for (const instance of __gml_global_variables) {
-      if (instance.alarm.length !== 0) {
-        for (let i = 0; i < 12; i++) {
-          if (instance.alarm[i]) {
-            instance.alarm[i]--
-            if (instance.alarm[i] === 0) {
-              delete instance.alarm[i]
-              switch (i) {
-                case 0: instance.alarm0(); break
-                case 1: instance.alarm1(); break
-                case 2: instance.alarm2(); break
-                case 3: instance.alarm3(); break
-                case 4: instance.alarm4(); break
-                case 5: instance.alarm5(); break
-                case 6: instance.alarm6(); break
-                case 7: instance.alarm7(); break
-                case 8: instance.alarm8(); break
-                case 9: instance.alarm9(); break
-                case 10: instance.alarm10(); break
-                case 11: instance.alarm11(); break
-              }
-              if (oldRoom !== room) { break }
-            }
-          }
-        }
-      }
-    }
+    // TODO: when are alarms supposed to run (during a tick)? before draw? ???
     for (const instance of __gml_room_variables) {
       if (instance.alarm.length !== 0) {
         for (let i = 0; i < 12; i++) {
@@ -1057,7 +1081,7 @@ class GMLRoom {
         }
       }
     }
-    let to_step = __gml_global_variables
+    let to_step = __gml_room_variables
     while (to_step.length !== 0) {
       __gml_to_step = []
       for (const instance of to_step) {
@@ -1073,40 +1097,8 @@ class GMLRoom {
     while (to_step.length !== 0) {
       __gml_to_step = []
       for (const instance of to_step) {
-        if (instance.beginstep === noop) { continue }
-        instance.xprevious = instance.x
-        instance.yprevious = instance.y
-        instance.beginstep()
-        if (oldRoom !== room) { break }
-      }
-      to_step = __gml_to_step
-    }
-    to_step = __gml_global_variables
-    while (to_step.length !== 0) {
-      __gml_to_step = []
-      for (const instance of to_step) {
         if (instance.step === noop) { continue }
         instance.step()
-        if (oldRoom !== room) { break }
-      }
-      to_step = __gml_to_step
-    }
-    to_step = __gml_room_variables
-    while (to_step.length !== 0) {
-      __gml_to_step = []
-      for (const instance of to_step) {
-        if (instance.step === noop) { continue }
-        instance.step()
-        if (oldRoom !== room) { break }
-      }
-      to_step = __gml_to_step
-    }
-    to_step = __gml_global_variables
-    while (to_step.length !== 0) {{
-      __gml_to_step = []
-      for (const instance of to_step) 
-        if (instance.endstep === noop) { continue }
-        instance.endstep()
         if (oldRoom !== room) { break }
       }
       to_step = __gml_to_step
@@ -1123,22 +1115,12 @@ class GMLRoom {
     }
     __gml_is_stepping = false
     // TODO: predraw/postdraw
-    for (const instance of __gml_global_variables.sort((a, b) => b.depth - a.depth)) {
-      if (instance.draw === noop) { continue }
-      instance.draw()
-      if (oldRoom !== room) { break }
-    }
     for (const instance of __gml_room_variables.sort((a, b) => b.depth - a.depth)) {
       if (instance.draw === noop) { continue }
       instance.draw()
       if (oldRoom !== room) { break }
     }
     if (__gml_drawgui_used) {
-      for (const instance of __gml_global_variables.sort((a, b) => b.depth - a.depth)) {
-        if (instance.drawgui === noop) { continue }
-        instance.drawgui()
-        if (oldRoom !== room) { break }
-      }
       for (const instance of __gml_room_variables.sort((a, b) => b.depth - a.depth)) {
         if (instance.drawgui === noop) { continue }
         instance.drawgui()
@@ -1186,10 +1168,7 @@ function __gml_proto_proxy(proto) {
     get: function(obj, prop) {
       if (prop === 'instances') { return clazz.instances }
       if (prop === 'constructor') { return clazz }
-      let obj2 = __gml_global_variables.find(obj3 => obj3 instanceof clazz)
-      if (obj2 === undefined) {
-        obj2 = __gml_room_variables.find(obj3 => obj3 instanceof clazz)
-      }
+      let obj2 = __gml_room_variables.find(obj3 => obj3 instanceof clazz)
       if (obj2 === undefined) {
         obj2 = proto
       }
@@ -1199,10 +1178,7 @@ function __gml_proto_proxy(proto) {
     set: function(obj, prop, val) {
       if (prop === 'instances') { obj.instances = val; return true }
       if (prop === 'constructor') { obj.constructor = clazz = val; return true }
-      let obj2 = __gml_global_variables.find(obj3 => obj3 instanceof clazz)
-      if (obj2 === undefined) {
-        obj2 = __gml_room_variables.find(obj3 => obj3 instanceof clazz)
-      }
+      let obj2 = __gml_room_variables.find(obj3 => obj3 instanceof clazz)
       if (obj2 === undefined) {
         obj2 = proto
       }
@@ -1227,11 +1203,6 @@ canvas.addEventListener('keydown', e => {
     }
   }
   const id = 'keypress' + e.keyCode
-  __gml_global_variables.forEach(obj => {
-    if (obj[id] !== noop) {
-      obj[id]()
-    }
-  })
   __gml_room_variables.forEach(obj => {
     if (obj[id] !== noop) {
       obj[id]()

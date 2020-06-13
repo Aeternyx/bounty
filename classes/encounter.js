@@ -38,7 +38,7 @@ class Encounter extends GMLObject {
     }
     let i = roll_d6(0, "Request type")
     self.type = get_request(i)
-    if (self.types === SkillTypes.gangbang) {
+    if (self.type === SkillTypes.gangbang) {
       do_gangbang_encounter.call(self)
       return
     }
@@ -56,7 +56,8 @@ class Encounter extends GMLObject {
     }
     self.text = approach + get_text_customer() + ". "
     let ii = 0
-    switch (self.type) {
+    // TODO: as with everything else here. appropriate advantages should apply for appropriate clients
+    /*switch (self.type) {
       case SkillTypes.vaginal:
         if (advantage_exist(Advantages.tight_pussy)) {
           ii += 1
@@ -76,7 +77,7 @@ class Encounter extends GMLObject {
       default:
         i = 0
         break
-    }
+    }*/
     if (self.type !== SkillTypes.hands) {
       i = roll_d6(ii, "Request internal")
     } else {

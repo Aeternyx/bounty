@@ -606,7 +606,7 @@ function get_text_danger(danger, attacked_action) {
 }
 
 function get_text_encounter_a(inside) {
-  let self = this
+  const self = this
   let roll = irandom_range(1, 2), i = ""
   switch (irandom_range(1, 4)) {
     case 1:
@@ -997,6 +997,7 @@ function get_text_encounter_request(type, inside) {
       case SkillTypes.anal:i = "He wants to have anal sex. "; break
       case SkillTypes.oral: i = "He wants you to give him head. "; break
       case SkillTypes.hands: i = "He wants you to jerk him off. "; break
+      case SkillTypes.gangbang: i = "They want to gangbang you. "; break // TODO: specific types
       default: i = "TEXT ERROR."; break
     }
   } else {
@@ -1005,6 +1006,7 @@ function get_text_encounter_request(type, inside) {
       case SkillTypes.anal:i = "He wants to cum in your ass. "; break
       case SkillTypes.oral: i = "He wants to cum in your mouth. "; break
       case SkillTypes.hands: i = "He wants you to jerk him off. "; break
+      case SkillTypes.gangbang: i = "They want to gangbang you and cum inside. "; break // TODO: specific types
       default: i = "TEXT ERROR."; break
     }
   }

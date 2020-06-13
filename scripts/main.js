@@ -1034,7 +1034,8 @@ function get_request(num) {
       break
   }
   // NOTE: gangbang
-  let threshold = -2 // 2
+  // TODO: -2 to deactivate
+  let threshold = 2 // 2
   if (advantage_exist(Advantages.gangbang_slut)) {
     threshold += 1
   }
