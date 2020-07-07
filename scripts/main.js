@@ -3,6 +3,21 @@
 
 // NOTE: 1: is dice divider; 2: is dice i think
 
+const Tags = window.Tags = {
+  hair_color: 0,
+  hair_length: 1,
+  hair_straightness: 2,
+  hair_style: 3,
+  eye_color: 4,
+  skin_color: 5,
+  height: 6,
+  weight: 7,
+  other: 8,
+  racial: 9,
+  breast_size: 10,
+  ass_size: 11,
+}
+
 const SkillTypes = window.SkillTypes = {
   none: 0,
   vaginal: 1,
