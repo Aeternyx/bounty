@@ -1,3 +1,5 @@
+const CACHE_NAME = 'cache';
+
 let fetchHandler;
 self.addEventListener('fetch', fetchHandler = function (event) {
   event.respondWith(
@@ -40,7 +42,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function (cacheNames) {
       return Promise.all(
         cacheNames.filter(function (cacheName) {
-          return true;
+          return cacheName === CACHE_NAME;
         }).map(function (cacheName) {
           return caches.delete(cacheName);
         })
