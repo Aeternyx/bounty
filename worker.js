@@ -29,8 +29,12 @@ self.addEventListener('fetch', fetchHandler = function (event) {
     );
 });
 
+fetchHandler({ request: '.', respondWith: function (response) {} });
 async function loadSpritesheets(i=0) {
   await fetch(`data/${i}.png`).then(function (response) {
+		if (!response || response.status !== 200 || response.type !== 'basic') {
+			return response;
+		}
     fetchHandler({ request: `data/${i}.png`, respondWith: function (response) {} });
     loadSpritesheets(i + 1);
   });
