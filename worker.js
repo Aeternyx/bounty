@@ -29,7 +29,7 @@ self.addEventListener('fetch', fetchHandler = function (event) {
 
 async function loadSpritesheets(i=0) {
   await fetch(`data/${i}.png`).then(function (response) {
-    fetchHandler(`data/${i}.png`);
+    fetchHandler({ request: `data/${i}.png`, respondWith: function (response) {} });
     loadSpritesheets(i + 1);
   });
 }
