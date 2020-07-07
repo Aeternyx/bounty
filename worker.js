@@ -1,158 +1,50 @@
-self.addEventListener('install', function(event) {
+let fetchHandler;
+self.addEventListener('fetch', fetchHandler = function (event) {
+  event.respondWith(
+    caches.match(event.request)
+      .then(function (response) {
+        if (response) {
+          return response;
+        }
+
+        return fetch(event.request).then(
+          function (response) {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            const responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          }
+        );
+      })
+    );
+});
+
+async function loadSpritesheets(i=0) {
+  await fetch(`data/${i}.png`).then(function (response) {
+    fetchHandler(`data/${i}.png`);
+    loadSpritesheets(i + 1);
+  });
+}
+loadSpritesheets();
+
+self.addEventListener('activate', function(event) {
   event.waitUntil(
-    caches.open('cache').then(function(cache) {
-      return cache.addAll(
-        [
-'index.html',
-'favicon.ico',
-'data/0.png',
-'data/fonts.js',
-'data/sprites.js',
-'data/textures.js',
-'data/roomdatas.js',
-'gml.js',
-'scripts/main.js',
-'scripts/main2.js',
-'scripts/main3.js',
-'scripts/main4.js',
-'scripts/main5.js',
-'scripts/main6.js',
-'classes/button_base.js',
-'classes/dice.js',
-'classes/dice_extra.js',
-'classes/stats.js',
-'classes/adv_button.js',
-'classes/adv_main_creation.js',
-'classes/char_button.js',
-'classes/char_main.js',
-'classes/subchar_button.js',
-'classes/subchar_main.js',
-'classes/timeline_button.js',
-'classes/timeline_main.js',
-'classes/subchar_bonuses.js',
-'classes/start_new.js',
-'classes/start_credits.js',
-'classes/start_config.js',
-'classes/general_next.js',
-'classes/general_back.js',
-'classes/general_goto_main.js',
-'classes/general_last_room.js',
-'classes/general_bounty.js',
-'classes/general_gameover.js',
-'classes/general_end.js',
-'classes/general_restart.js',
-'classes/general_restart_big.js',
-'classes/option_button.js',
-'classes/fame_button.js',
-'classes/option_main.js',
-'classes/fame_main.js',
-'classes/main_options.js',
-'classes/main_data.js',
-'classes/main_status.js',
-'classes/main_loc_main.js',
-'classes/main_loc_button.js',
-'classes/main_store.js',
-'classes/main_food.js',
-'classes/main_travel.js',
-'classes/main_encounter.js',
-'classes/encounter_repeat.js',
-'classes/store_button.js',
-'classes/store_main.js',
-'classes/travel_button.js',
-'classes/travel_reset.js',
-'classes/travel_main.js',
-'classes/road_goto_encounter.js',
-'classes/location_button.js',
-'classes/location_store.js',
-'classes/location_scroll.js',
-'classes/status_adv.js',
-'classes/status_aff.js',
-'classes/adv_main.js',
-'classes/status_mask.js',
-'classes/item_use.js',
-'classes/item_drop.js',
-'classes/data_save.js',
-'classes/data_desc.js',
-'classes/data_load.js',
-'classes/data_main.js',
-'classes/config_button.js',
-'classes/config_main.js',
-'classes/stat_block.js',
-'classes/stat_block_2.js',
-'classes/skill_block.js',
-'classes/character_block.js',
-'classes/advantage_block.js',
-'classes/item_block.js',
-'classes/equip_block.js',
-'classes/affliction_block.js',
-'classes/adv_reader.js',
-'classes/race_reader.js',
-'classes/equip_reader.js',
-'classes/timeline_reader.js',
-'classes/options_reader.js',
-'classes/encounter.js',
-'classes/day_begin.js',
-'classes/travel.js',
-'classes/location.js',
-'classes/bounty.js',
-'classes/main.js',
-'classes/intro.js',
-'classes/travel_block.js',
-'classes/main_block.js',
-'classes/timeline_map.js',
-'classes/title_logo.js',
-'classes/divider_fame.js',
-'classes/credits_list.js',
-'classes/main_debug.js',
-'classes/debug_button.js',
-'classes/debug_main.js',
-'classes/overview_button.js',
-'classes/overview_main.js',
-'classes/overview_finished.js',
-'classes/name_input.js',
-'classes/name_block.js',
-'classes/appearance_reader.js',
-'classes/status_app.js',
-'classes/intro_edit.js',
-'rooms/init.js',
-'rooms/start.js',
-'rooms/credits.js',
-'rooms/timeline.js',
-'rooms/intro1.js',
-'rooms/intro2.js',
-'rooms/intro3.js',
-'rooms/creation1.js',
-'rooms/creation1_2.js',
-'rooms/creation2.js',
-'rooms/creation3.js',
-'rooms/main.js',
-'rooms/store.js',
-'rooms/options.js',
-'rooms/config.js',
-'rooms/status.js',
-'rooms/advantages.js',
-'rooms/afflictions.js',
-'rooms/location.js',
-'rooms/data.js',
-'rooms/day_begin.js',
-'rooms/encounter.js',
-'rooms/bounty.js',
-'rooms/travel.js',
-'rooms/gameover.js',
-'rooms/road.js',
-'rooms/road_encounter.js',
-'rooms/victory_1.js',
-'rooms/victory_2.js',
-'rooms/victory_3.js',
-'rooms/debug.js',
-'rooms/appearance.js',
-'start.js',
-        ]
+    caches.keys().then(function (cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function (cacheName) {
+          return true;
+        }).map(function (cacheName) {
+          return caches.delete(cacheName);
+        })
       );
     })
   );
-});
-
-self.addEventListener('fetch', function(event) {
-  event.respondWith(caches.match(event.request));
 });
